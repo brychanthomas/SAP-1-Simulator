@@ -1,11 +1,30 @@
+interface ControlLines {
+  hlt?: number,
+  mi?: number,
+  ri?: number,
+  ro?: number,
+  io?: number,
+  ii?: number,
+  ai?: number,
+  ao?: number,
+  e?: number,
+  su?: number,
+  bi?: number,
+  oi?: number,
+  ci?: number,
+  co?: number,
+  j?: number,
+  fi?: number
+}
+
 abstract class Component {
   private bus: Bus8Bit;
 
-  constructor(bus) {
+  constructor(bus: Bus8Bit) {
     this.bus = bus;
   }
 
-  abstract update();
+  abstract update(): void;
 
   //abstract draw();
 }
