@@ -1,27 +1,29 @@
 interface ControlLines {
-  hlt?: number,
-  mi?: number,
-  ri?: number,
-  ro?: number,
-  io?: number,
-  ii?: number,
-  ai?: number,
-  ao?: number,
-  e?: number,
-  su?: number,
-  bi?: number,
-  oi?: number,
-  ci?: number,
-  co?: number,
-  j?: number,
-  fi?: number
+  hlt: 0,
+  mi: 0,
+  ri: 0,
+  ro: 0,
+  io: 0,
+  ii: 0,
+  ai: 0,
+  ao: 0,
+  e: 0,
+  su: 0,
+  bi: 0,
+  oi: 0,
+  ci: 0,
+  co: 0,
+  j: 0,
+  fi: 0
 }
 
 abstract class Component {
   private bus: Bus8Bit;
+  private controlLines: ControlLines;
 
-  constructor(bus: Bus8Bit) {
+  constructor(bus: Bus8Bit, controlLines: ControlLines) {
     this.bus = bus;
+    this.controlLines = controlLines;
   }
 
   abstract update(): void;
