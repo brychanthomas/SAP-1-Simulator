@@ -1,6 +1,6 @@
 import { Component, Computer } from "./exports";
 
-abstract class Register8Bit extends Component {
+export abstract class Register8Bit extends Component {
   public contents: Array<number>;
   constructor(computer: Computer) {
     super(computer);
@@ -59,6 +59,7 @@ export class InstructionRegister extends Register8Bit {
 
 export class MemoryAddressRegister extends Component {
   public contents: Array<number>;
+  public address: number;
 
   constructor(computer: Computer) {
     super(computer);
@@ -69,6 +70,9 @@ export class MemoryAddressRegister extends Component {
     if (this.computer.controlLines.mi) {
       this.contents = this.computer.bus.lowNibble;
     }
+    //contents of MAR as integer
+    this.address = this.contents.slice().reverse().reduce(
+      (acc, val, idx) => acc + val * (2**idx));
   }
 }
 

@@ -1,4 +1,4 @@
 export {ARegister, BRegister, OutputRegister, InstructionRegister,
-        MemoryAddressRegister, ProgramCounter} from './registers';
+        MemoryAddressRegister, ProgramCounter, Register8Bit} from './registers';
 
 export { Component, Computer } from "./computer";
