@@ -21,20 +21,34 @@ interface ControlLines {
   fi: number
 }
 
-var c:ControlLines;
+class Computer {
+  public bus: Bus8Bit;
+  public controlLines: ControlLines;
+  public ProgramCounter;
 
-abstract class Component {
-  private bus: Bus8Bit;
-  private controlLines: ControlLines;
+  constructor (){
+    this.bus = new Bus8Bit();
+    this.controlLines = {
+      hlt: 0,
+      mi: 0,
+      ri: 0,
+      ro: 0,
+      io: 0,
+      ii: 0,
+      ai: 0,
+      ao: 0,
+      e: 0,
+      su: 0,
+      bi: 0,
+      oi: 0,
+      ci: 0,
+      co: 0,
+      j: 0,
+      fi: 0
+    }
+    this.programCounter = new ProgramCounter(this);
 
-  constructor(bus: Bus8Bit, controlLines: ControlLines) {
-    this.bus = bus;
-    this.controlLines = controlLines;
   }
-
-  abstract update(): void;
-
-  //abstract draw();
 }
 
 //class to represent central 8 bit bus that components connect
@@ -60,5 +74,43 @@ class Bus8Bit {
 
   get lowNibble() {
     return this.lines.slice(4);
+  }
+}
+
+abstract class Component {
+  public computer: Computer;
+
+  constructor(computer: Computer) {
+    this.computer = computer;
+  }
+
+  abstract update(): void;
+}
+
+class ProgramCounter extends Component {
+  private state: Array<number>;
+
+  constructor(computer: Computer) {
+    super(computer)
+    this.state = [0, 0, 0, 0];
+  }
+
+  update() {
+    if (this.computer.controlLines.co === 1) { //output to bus
+      this.computer.bus.lowNibble = this.state;
+    }
+
+    if (this.computer.controlLines.ci === 1) { //increment counter
+      let value = this.state.slice().reverse().reduce(
+        (acc, val, idx) => acc + val * (2**idx)); //convert to number
+      value++; //increment number
+      value %= 15;
+      //convert number back to array of 4 bits
+      this.state = (value >>> 0).toString(2).padStart(4, '0').split('').slice(-4).map(x=>+x);
+    }
+
+    if (this.computer.controlLines.j === 1) { //jump to bus value
+      this.state = this.computer.bus.lowNibble;
+    }
   }
 }
