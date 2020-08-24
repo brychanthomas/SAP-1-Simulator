@@ -21,10 +21,10 @@ interface ControlLines {
   fi: number
 }
 
-class Computer {
+export class Computer {
   public bus: Bus8Bit;
   public controlLines: ControlLines;
-  public ProgramCounter;
+  public pc: ProgramCounter;
 
   constructor (){
     this.bus = new Bus8Bit();
@@ -46,8 +46,11 @@ class Computer {
       j: 0,
       fi: 0
     }
-    this.programCounter = new ProgramCounter(this);
+    this.pc = new ProgramCounter(this);
+  }
 
+  clockTick() {
+    this.pc.update();
   }
 }
 
@@ -77,7 +80,7 @@ class Bus8Bit {
   }
 }
 
-abstract class Component {
+export abstract class Component {
   public computer: Computer;
 
   constructor(computer: Computer) {
