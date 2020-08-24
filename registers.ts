@@ -56,3 +56,18 @@ class InstructionRegister extends Register8Bit {
     }
   }
 }
+
+class MemoryAddressRegister extends Component {
+  public contents: Array<number>;
+
+  constructor(computer: Computer) {
+    super(computer);
+    this.contents = [0, 0, 0, 0];
+  }
+
+  update() {
+    if (this.computer.controlLines.mi) {
+      this.contents = this.computer.bus.lowNibble;
+    }
+  }
+}

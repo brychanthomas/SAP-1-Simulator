@@ -81,7 +81,7 @@ class Bus8Bit {
 }
 
 export abstract class Component {
-  public computer: Computer;
+  protected computer: Computer;
 
   constructor(computer: Computer) {
     this.computer = computer;
