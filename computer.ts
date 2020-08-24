@@ -1,4 +1,5 @@
-import {ProgramCounter} from './exports';
+import { ProgramCounter, ARegister, BRegister, OutputRegister,
+        InstructionRegister, MemoryAddressRegister } from './exports';
 
 export interface ControlLines {
   hlt: number,
@@ -59,6 +60,11 @@ export class Computer {
   public bus: Bus8Bit;
   public controlLines: ControlLines;
   public pc: ProgramCounter;
+  public aRegister: ARegister;
+  public bRegister: BRegister;
+  public mar: MemoryAddressRegister;
+  public ir: InstructionRegister;
+  public out: OutputRegister;
 
   constructor (){
     this.bus = new Bus8Bit();
@@ -81,9 +87,19 @@ export class Computer {
       fi: 0
     }
     this.pc = new ProgramCounter(this);
+    this.aRegister = new ARegister(this);
+    this.bRegister = new BRegister(this);
+    this.mar = new MemoryAddressRegister(this);
+    this.ir = new InstructionRegister(this);
+    this.out = new OutputRegister(this);
   }
 
   clockTick() {
     this.pc.update();
+    this.aRegister.update();
+    this.bRegister.update();
+    this.mar.update();
+    this.ir.update();
+    this.out.update();
   }
 }
