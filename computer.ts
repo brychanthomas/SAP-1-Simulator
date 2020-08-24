@@ -1,5 +1,5 @@
 import { ProgramCounter, ARegister, BRegister, OutputRegister,
-        InstructionRegister, MemoryAddressRegister } from './exports';
+        InstructionRegister, MemoryAddressRegister, RAM16 } from './exports';
 
 export interface ControlLines {
   hlt: number,
@@ -65,6 +65,7 @@ export class Computer {
   public mar: MemoryAddressRegister;
   public ir: InstructionRegister;
   public out: OutputRegister;
+  public ram: RAM16;
 
   constructor (){
     this.bus = new Bus8Bit();
@@ -92,6 +93,7 @@ export class Computer {
     this.mar = new MemoryAddressRegister(this);
     this.ir = new InstructionRegister(this);
     this.out = new OutputRegister(this);
+    this.ram = new RAM16(this);
   }
 
   clockTick() {
@@ -101,5 +103,6 @@ export class Computer {
     this.mar.update();
     this.ir.update();
     this.out.update();
+    this.ram.update();
   }
 }

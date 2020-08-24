@@ -20,7 +20,7 @@ class RAMRegister extends Register8Bit {
   }
 }
 
-class RAM16 extends Component {
+export class RAM16 extends Component {
   public registers: Array<RAMRegister>;
   constructor(computer: Computer) {
     super(computer);
