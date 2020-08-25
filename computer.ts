@@ -1,6 +1,7 @@
 import { ProgramCounter, ARegister, BRegister, OutputRegister,
          InstructionRegister, MemoryAddressRegister } from './registers.js';
 import { RAM16 } from './ram.js';
+import { AdderSubtractor } from './adder.js';
 
 export interface ControlLines {
   hlt: number,
@@ -11,7 +12,7 @@ export interface ControlLines {
   ii: number,
   ai: number,
   ao: number,
-  e: number,
+  so: number,
   su: number,
   bi: number,
   oi: number,
@@ -57,6 +58,7 @@ export class Computer {
   public ir: InstructionRegister;
   public out: OutputRegister;
   public ram: RAM16;
+  public adderSubtractor: AdderSubtractor;
 
   constructor (){
     this.bus = new Bus8Bit();
@@ -69,7 +71,7 @@ export class Computer {
       ii: 0,
       ai: 0,
       ao: 0,
-      e: 0,
+      so: 0,
       su: 0,
       bi: 0,
       oi: 0,
@@ -85,6 +87,7 @@ export class Computer {
     this.ir = new InstructionRegister(this);
     this.out = new OutputRegister(this);
     this.ram = new RAM16(this);
+    this.adderSubtractor = new AdderSubtractor(this);
   }
 
   clockTick() {
@@ -95,5 +98,6 @@ export class Computer {
     this.ir.update();
     this.out.update();
     this.ram.update();
+    this.adderSubtractor.update();
   }
 }
