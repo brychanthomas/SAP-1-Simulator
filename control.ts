@@ -8,12 +8,12 @@ const INSTRUCTION_LOGIC = {
     '0010': { //ADD
       2: ['mi', 'io'],
       3: ['ro', 'bi'],
-      4: ['ai', 'eo', 'fi']
+      4: ['ai', 'so', 'fi']
     },
     '0011': { //SUB
       2: ['mi', 'io'],
       3: ['ro', 'bi'],
-      4: ['ai', 'eo', 'su', 'fi']
+      4: ['ai', 'so', 'su', 'fi']
     },
     '1110': { //OUT
       2: ['ao', 'oi']

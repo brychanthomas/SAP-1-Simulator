@@ -78,9 +78,10 @@ export class Computer {
 
   clockTick() {
     this.pc.update();
+    this.adderSubtractor.update();
     this.update();
     this.update();
-    
+
   }
   update() {
     this.aRegister.update();
@@ -89,7 +90,7 @@ export class Computer {
     this.ir.update();
     this.out.update();
     this.ram.update();
-    this.adderSubtractor.update();
+
   }
 
   clockTock() {

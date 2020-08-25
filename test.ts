@@ -75,9 +75,37 @@ class UnitTests {
     UnitTests.compare(c.ir.contents, [1,0,1,0,1,0,1,0], "instruction fetch");
     UnitTests.compare(c.pc.state, [0,0,0,1], "program counter increment");
   }
+
+  static testInstructions() {
+    var c = new Computer();
+    c.ram.registers[0].contents = [0,0,0,1, 1,1,1,1]; //LDA 15
+    c.ram.registers[15].contents = [0,1,0,1,0,1,0,1];
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    UnitTests.compare(c.aRegister.contents, [0,1,0,1,0,1,0,1], "LDA instruction");
+    c.ram.registers[14].contents = [0,0,0,0,0,0,0,1];
+    c.ram.registers[1].contents = [0,0,1,0, 1,1,1,0]; //ADD 14
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    UnitTests.compare(c.aRegister.contents, [0,1,0,1,0,1,1,0], "ADD instruction");
+    c.ram.registers[13].contents = [0,0,1,0,0,0,0,0];
+    c.ram.registers[2].contents = [0,0,1,1, 1,1,0,1] // SUB 13
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    UnitTests.compare(c.aRegister.contents, [0,0,1,1,0,1,1,0], "SUB instruction");
+    c.ram.registers[3].contents = [1,1,1,0, 0,0,0,0] // OUT
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    UnitTests.compare(c.out.contents, [0,0,1,1,0,1,1,0], "OUT instruction");
+  }
 }
 
 UnitTests.testARegister();
 UnitTests.testRAM();
 UnitTests.testAdderSubtractor();
 UnitTests.testInstructionFetch();
+UnitTests.testInstructions();
