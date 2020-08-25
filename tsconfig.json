@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "outDir": "scripts",
+    "target": "ES2017",
+    "module": "es6",
+    "noImplicitAny": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+  },
+  "files": [
+    "registers.ts",
+    "ram.ts",
+    "computer.ts",
+    "script.ts",
+    "component.ts",
+    "test.ts"
+  ],
+  "include": [
+    "./types"
+  ]
+}

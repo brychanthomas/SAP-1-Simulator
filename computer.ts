@@ -1,5 +1,6 @@
 import { ProgramCounter, ARegister, BRegister, OutputRegister,
-        InstructionRegister, MemoryAddressRegister, RAM16 } from './exports';
+         InstructionRegister, MemoryAddressRegister } from './registers.js';
+import { RAM16 } from './ram.js';
 
 export interface ControlLines {
   hlt: number,
@@ -44,16 +45,6 @@ export class Bus8Bit {
   get lowNibble() {
     return this.lines.slice(4);
   }
-}
-
-export abstract class Component {
-  protected computer: Computer;
-
-  constructor(computer: Computer) {
-    this.computer = computer;
-  }
-
-  abstract update(): void;
 }
 
 export class Computer {

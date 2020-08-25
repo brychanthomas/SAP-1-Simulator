@@ -1,4 +1,6 @@
-import { Component, Register8Bit, Computer } from './exports';
+import { Register8Bit } from './registers.js';
+import type { Computer } from './computer.js';
+import { Component } from './component.js'
 
 class RAMRegister extends Register8Bit {
   public address: number;

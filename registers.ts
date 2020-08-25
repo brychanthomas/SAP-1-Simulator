@@ -1,4 +1,5 @@
-import { Component, Computer } from "./exports";
+import { Component } from "./component.js";
+import type { Computer } from "./computer.js";
 
 export abstract class Register8Bit extends Component {
   public contents: Array<number>;
