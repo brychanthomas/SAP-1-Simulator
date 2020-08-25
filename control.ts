@@ -1,6 +1,7 @@
 import { Component } from './component.js';
 
 const INSTRUCTION_LOGIC = {
+    '0000': {}, //NOP
     '0001': { //LDA
       2: ['mi', 'io'],
       3: ['ro', 'ai']
@@ -14,6 +15,13 @@ const INSTRUCTION_LOGIC = {
       2: ['mi', 'io'],
       3: ['ro', 'bi'],
       4: ['ai', 'so', 'su', 'fi']
+    },
+    '0100': { //STA
+      2: ['io', 'mi'],
+      3: ['ao', 'ri']
+    },
+    '0101': { //LDI
+      2: ['io', 'ai']
     },
     '1110': { //OUT
       2: ['ao', 'oi']
