@@ -23,6 +23,9 @@ const INSTRUCTION_LOGIC = {
     '0101': { //LDI
       2: ['io', 'ai']
     },
+    '0110': { //JMP
+      2: ['io', 'j']
+    },
     '1110': { //OUT
       2: ['ao', 'oi']
     },
