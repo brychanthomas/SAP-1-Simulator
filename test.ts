@@ -66,8 +66,18 @@ class UnitTests {
     output = c.bus.lines.concat([c.adderSubtractor.flags.cf, c.adderSubtractor.flags.zf]);
     UnitTests.compare(output, [0,0,0,0,0,0,0,0, 0,1], "zero flag");
   }
+
+  static testInstructionFetch() {
+    var c = new Computer();
+    c.ram.registers[0].contents = [1,0,1,0,1,0,1,0];
+    c.clockTock(); c.clockTick();
+    c.clockTock(), c.clockTick();
+    UnitTests.compare(c.ir.contents, [1,0,1,0,1,0,1,0], "instruction fetch");
+    UnitTests.compare(c.pc.state, [0,0,0,1], "program counter increment");
+  }
 }
 
 UnitTests.testARegister();
 UnitTests.testRAM();
 UnitTests.testAdderSubtractor();
+UnitTests.testInstructionFetch();

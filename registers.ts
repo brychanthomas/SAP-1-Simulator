@@ -78,7 +78,7 @@ export class MemoryAddressRegister extends Component {
 }
 
 export class ProgramCounter extends Component {
-  private state: Array<number>;
+  public state: Array<number>;
 
   constructor(computer: Computer) {
     super(computer)

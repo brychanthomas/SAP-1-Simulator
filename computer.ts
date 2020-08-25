@@ -2,6 +2,7 @@ import { ProgramCounter, ARegister, BRegister, OutputRegister,
          InstructionRegister, MemoryAddressRegister } from './registers.js';
 import { RAM16 } from './ram.js';
 import { AdderSubtractor } from './adder.js';
+import { ControlSequencer } from './control.js';
 
 export interface ControlLines {
   hlt: number,
@@ -59,9 +60,43 @@ export class Computer {
   public out: OutputRegister;
   public ram: RAM16;
   public adderSubtractor: AdderSubtractor;
+  public controller: ControlSequencer;
 
   constructor (){
+    this.resetControlLines();
     this.bus = new Bus8Bit();
+    this.pc = new ProgramCounter(this);
+    this.aRegister = new ARegister(this);
+    this.bRegister = new BRegister(this);
+    this.mar = new MemoryAddressRegister(this);
+    this.ir = new InstructionRegister(this);
+    this.out = new OutputRegister(this);
+    this.ram = new RAM16(this);
+    this.adderSubtractor = new AdderSubtractor(this);
+    this.controller = new ControlSequencer(this);
+  }
+
+  clockTick() {
+    this.pc.update();
+    this.update();
+    this.update();
+    
+  }
+  update() {
+    this.aRegister.update();
+    this.bRegister.update();
+    this.mar.update();
+    this.ir.update();
+    this.out.update();
+    this.ram.update();
+    this.adderSubtractor.update();
+  }
+
+  clockTock() {
+    this.controller.update();
+  }
+
+  resetControlLines() {
     this.controlLines = {
       hlt: 0,
       mi: 0,
@@ -80,24 +115,5 @@ export class Computer {
       j: 0,
       fi: 0
     }
-    this.pc = new ProgramCounter(this);
-    this.aRegister = new ARegister(this);
-    this.bRegister = new BRegister(this);
-    this.mar = new MemoryAddressRegister(this);
-    this.ir = new InstructionRegister(this);
-    this.out = new OutputRegister(this);
-    this.ram = new RAM16(this);
-    this.adderSubtractor = new AdderSubtractor(this);
-  }
-
-  clockTick() {
-    this.pc.update();
-    this.aRegister.update();
-    this.bRegister.update();
-    this.mar.update();
-    this.ir.update();
-    this.out.update();
-    this.ram.update();
-    this.adderSubtractor.update();
   }
 }
