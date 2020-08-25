@@ -56,6 +56,9 @@ export class InstructionRegister extends Register8Bit {
       this.computer.bus.lowNibble = this.contents.slice(4);
     }
   }
+  get opcode() {
+    return this.contents.slice(0, 4);
+  }
 }
 
 export class MemoryAddressRegister extends Component {
