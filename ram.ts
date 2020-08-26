@@ -31,9 +31,16 @@ export class RAM16 extends Component {
       this.registers.push(new RAMRegister(computer, i));
     }
   }
+
   update() {
     for (var reg of this.registers) {
       reg.update();
+    }
+  }
+
+  program(data: Array<Array<number>>) {
+    for (var byte=0; byte<data.length; byte++) {
+      this.registers[byte].contents = data[byte];
     }
   }
 }
