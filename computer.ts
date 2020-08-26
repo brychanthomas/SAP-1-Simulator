@@ -77,13 +77,19 @@ export class Computer {
   }
 
   clockTick() {
-    this.pc.update();
+    //the adderSubtractor must be updated separately because
+    // otherwise the A register could load the sum, the sum
+    // will change and the A register will then load the new sum,
+    // causing errors such as 2 + 1 = 4
     this.adderSubtractor.update();
+    // the PC increment must be done separately because otherwise
+    // it will increment twice
+    this.pc.updateIncrement();
     this.update();
     this.update();
-
   }
   update() {
+    this.pc.updateReadWrite();
     this.aRegister.update();
     this.bRegister.update();
     this.mar.update();

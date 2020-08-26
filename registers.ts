@@ -89,10 +89,20 @@ export class ProgramCounter extends Component {
   }
 
   update() {
+    throw new Error("PC does not use update method.");
+  }
+
+  updateReadWrite() {
     if (this.computer.controlLines.co === 1) { //output to bus
       this.computer.bus.lowNibble = this.state;
     }
 
+    if (this.computer.controlLines.j === 1) { //jump to bus value
+      this.state = this.computer.bus.lowNibble;
+    }
+  }
+
+  updateIncrement() {
     if (this.computer.controlLines.ci === 1) { //increment counter
       let value = this.state.slice().reverse().reduce(
         (acc, val, idx) => acc + val * (2**idx)); //convert to number
@@ -100,10 +110,6 @@ export class ProgramCounter extends Component {
       value %= 15;
       //convert number back to array of 4 bits
       this.state = (value >>> 0).toString(2).padStart(4, '0').split('').slice(-4).map(x=>+x);
-    }
-
-    if (this.computer.controlLines.j === 1) { //jump to bus value
-      this.state = this.computer.bus.lowNibble;
     }
   }
 }

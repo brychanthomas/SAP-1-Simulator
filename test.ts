@@ -76,7 +76,7 @@ class UnitTests {
     UnitTests.compare(c.pc.state, [0,0,0,1], "program counter increment");
   }
 
-  static testInstructions() {
+  static testBasicInstructions() {
     var c = new Computer();
     c.ram.registers[0].contents = [0,0,0,1, 1,1,1,1]; //LDA 15
     c.ram.registers[15].contents = [0,1,0,1,0,1,0,1];
@@ -102,10 +102,14 @@ class UnitTests {
     }
     UnitTests.compare(c.out.contents, [0,0,1,1,0,1,1,0], "OUT instruction");
   }
+
+  static testExtraInstructions() {
+    var c = new Computer();
+  }
 }
 
 UnitTests.testARegister();
 UnitTests.testRAM();
 UnitTests.testAdderSubtractor();
 UnitTests.testInstructionFetch();
-UnitTests.testInstructions();
+UnitTests.testBasicInstructions();
