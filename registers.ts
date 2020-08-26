@@ -43,6 +43,8 @@ export class OutputRegister extends Register8Bit {
   update() {
     if (this.computer.controlLines.oi === 1) {
       this.readFromBus();
+      console.log('OUT: '+this.contents.slice().reverse().reduce(
+        (acc, val, idx) => acc + val * (2**idx)));
     }
   }
 }
