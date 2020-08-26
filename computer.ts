@@ -77,7 +77,8 @@ export class Computer {
   }
 
   clockTick() {
-    //the adderSubtractor must be updated separately because
+    this.bus.lines = [0,0,0,0,0,0,0,0];
+    // the adderSubtractor must be updated separately because
     // otherwise the A register could load the sum, the sum
     // will change and the A register will then load the new sum,
     // causing errors such as 2 + 1 = 4

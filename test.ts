@@ -105,6 +105,22 @@ class UnitTests {
 
   static testExtraInstructions() {
     var c = new Computer();
+    c.aRegister.contents = [0,1,0,1,0,1,0,1];
+    c.ram.registers[0].contents = [0,1,0,0, 1,1,1,1] // STA 15
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    UnitTests.compare(c.ram.registers[15].contents, [0,1,0,1,0,1,0,1], "STA instruction");
+    c.ram.registers[1].contents = [0,1,0,1, 0,0,1,1]; // LDI 3
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    UnitTests.compare(c.aRegister.contents, [0,0,0,0,0,0,1,1], "LDI instruction");
+    c.ram.registers[2].contents = [0,1,1,0, 0,1,1,0]; // JMP 6
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    UnitTests.compare(c.pc.state, [0,1,1,0], "JMP instruction");
   }
 }
 
@@ -113,3 +129,4 @@ UnitTests.testRAM();
 UnitTests.testAdderSubtractor();
 UnitTests.testInstructionFetch();
 UnitTests.testBasicInstructions();
+UnitTests.testExtraInstructions();
