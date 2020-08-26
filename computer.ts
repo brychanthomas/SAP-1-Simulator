@@ -89,6 +89,7 @@ export class Computer {
     this.update();
     this.update();
   }
+
   update() {
     this.pc.updateReadWrite();
     this.aRegister.update();
