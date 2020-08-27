@@ -21,9 +21,9 @@ computer.ram.program([
 ]);
 
 computer.startClock();
+computer.clock.speed = 2;
 
 setInterval(() => {
   computerState.bus = computer.bus.lines
-  computerState.pc = computer.pc.state.slice().reverse().reduce(
-    (acc, val, idx) => acc + val * (2**idx));
-}, 50);
+  computerState.pc = computer.pc.state
+}, Math.max(50, 1000/(computer.clock.speed*2)));

@@ -12,38 +12,48 @@ var computerState = {
       this._bus = bus;
     }
   },
-  set pc(addr: number) {
-    if (addr !== this._pc) {
-      drawPC(addr, 600, 10);
+  set pc(state: Array<number>) {
+    if (!state.every((val, idx) => val === this._pc[idx])) {
+      drawPC(state, 600, 20);
     }
   }
 }
 
 function setup()  {
-  createCanvas(700, 200);
+  createCanvas(800, 200);
   background(255);
 }
 
-function draw() {
-
+class Draw {
+  static binaryAndNumerical(binArray: Array<number>, x: number, y: number, colour: Array<number>) {
+    fill(0);
+    textSize(25);
+    noStroke();
+    var value = binArray.slice().reverse().reduce(
+      (acc, val, idx) => acc + val * (2**idx));
+    text(String(value), x, y);
+    for (var i=0; i<binArray.length; i++) {
+      fill(colour.map((itm) => itm * binArray[i]));
+      circle(x+5+15*i, y+10, 10);
+    }
+  }
 }
 
 function drawBus(bus: Array<number>, x: number, y: number) {
   strokeWeight(5);
   for (var i=0; i<8; i++) {
-    if (bus[i] === 1) {
-      stroke([0, 255, 0]);
-    } else {
-      stroke(0);
-    }
+    stroke([0, 255*bus[i], 0]);
     line(x+15*i, y, x+15*i, y+100);
   }
 }
 
-function drawPC(addr: number, x: number, y: number) {
+function drawPC(state: Array<number>, x: number, y: number) {
   strokeWeight(2);
+  fill(255);
   stroke(0);
-  rect(x, y, 60, 50);
-  textSize(40);
-  text(String(addr), x+10, y+10, x+70, y+70);
+  rect(x, y, 75, 50);
+  Draw.binaryAndNumerical(state, x+10, y+25, [255,125,0]);
+  fill(0);
+  textSize(15);
+  text("Program Counter", x, y-8);
 }

@@ -236,6 +236,11 @@ declare function quad(x1: number, y1: number, x2: number, y2: number, x3: number
 declare function rect(x: number, y: number, w: number, h: number, tl?: number, tr?: number, br?: number, bl?: number): p5;
 
 /**
+ * Draws a circle to the screen.
+ */
+declare function circle(x: number, y: number, r:number): p5;
+
+/**
  * A triangle is a plane created by connecting three points.
  */
 declare function triangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number): p5;
@@ -1330,7 +1335,7 @@ declare function textWidth(theText: string): number;
 /**
  * Draws text to the screen.
  */
-declare function text(str: string, x: number, y: number, x2: number, y2: number): any;
+declare function text(str: string, x: number, y: number, x2?: number, y2?: number): any;
 
 /**
  * Sets the current font that will be drawn with the text() function.
@@ -1666,7 +1671,7 @@ declare function removeElements(): void;
 declare function getAudioContext(): any;
 
 /**
- * Returns a number representing the master amplitude (volume) for sound 
+ * Returns a number representing the master amplitude (volume) for sound
  * in this sketch.
  */
 declare function getMasterVolume(): number;
@@ -1697,4 +1702,3 @@ declare function midiToFreq(midiNote: number): number;
 // declare function soundFormats(formats: string|Strings): void;
 
 // TODO: Property "{String} failedPath path to the file that failed to load", defined in lib/addons/p5.sound.js, is not a valid JS symbol name
-
