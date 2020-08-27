@@ -48,22 +48,22 @@ class UnitTests {
     c.bRegister.contents = [0, 0, 0, 0, 0, 1, 1, 1];
     c.controlLines.so = 1;
     c.clockTick();
-    var output = c.bus.lines.concat([c.adderSubtractor.flags.cf, c.adderSubtractor.flags.zf]);
+    var output = c.bus.lines.concat([c.flagsRegister.cf, c.flagsRegister.zf]);
     UnitTests.compare(output, [0,0,0,0,1,0,1,1, 0,0], "addition");
     c.controlLines.su = 1;
     c.clockTick();
-    output = c.bus.lines.concat([c.adderSubtractor.flags.cf, c.adderSubtractor.flags.zf]);
+    output = c.bus.lines.concat([c.flagsRegister.cf, c.flagsRegister.zf]);
     UnitTests.compare(output, [1,1,1,1,1,1,0,1, 0,0], "subtraction");
     c.aRegister.contents = [1, 1, 1, 1, 1, 1, 1, 1];
     c.controlLines.su = 0;
     c.controlLines.fi = 1;
     c.clockTick();
-    output = c.bus.lines.concat([c.adderSubtractor.flags.cf, c.adderSubtractor.flags.zf]);
+    output = c.bus.lines.concat([c.flagsRegister.cf, c.flagsRegister.zf]);
     UnitTests.compare(output, [0,0,0,0,0,1,1,0, 1,0], "carry flag");
     c.bRegister.contents = [1, 1, 1, 1, 1, 1, 1, 1];
     c.controlLines.su = 1;
     c.clockTick();
-    output = c.bus.lines.concat([c.adderSubtractor.flags.cf, c.adderSubtractor.flags.zf]);
+    output = c.bus.lines.concat([c.flagsRegister.cf, c.flagsRegister.zf]);
     UnitTests.compare(output, [0,0,0,0,0,0,0,0, 0,1], "zero flag");
   }
 

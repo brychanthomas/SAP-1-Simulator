@@ -60,6 +60,7 @@ export class Computer {
   public out: OutputRegister;
   public ram: RAM16;
   public adderSubtractor: AdderSubtractor;
+  public flagsRegister = {cf: 0, zf: 0, flags: '00'}
   public controller: ControlSequencer;
 
   constructor (){
