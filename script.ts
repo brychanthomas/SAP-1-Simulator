@@ -20,14 +20,4 @@ computer.ram.program([
   [0,1,1,0, 0,0,1,1]  // JMP 3
 ]);
 
-function tock() {
-  computer.clockTock();
-  setTimeout( () => tick() , 40);
-}
-
-function tick() {
-  computer.clockTick();
-  setTimeout( () => tock() , 40);
-}
-
-tock();
+computer.startClock();

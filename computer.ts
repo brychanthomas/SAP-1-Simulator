@@ -2,7 +2,7 @@ import { ProgramCounter, ARegister, BRegister, OutputRegister,
          InstructionRegister, MemoryAddressRegister } from './registers.js';
 import { RAM16 } from './ram.js';
 import { AdderSubtractor } from './adder.js';
-import { ControlSequencer } from './control.js';
+import { ControlSequencer, Clock } from './control.js';
 
 export interface ControlLines {
   hlt: number,
@@ -62,6 +62,7 @@ export class Computer {
   public adderSubtractor: AdderSubtractor;
   public flagsRegister = {cf: 0, zf: 0, flags: '00'}
   public controller: ControlSequencer;
+  public clock: Clock;
 
   constructor (){
     this.resetControlLines();
@@ -75,6 +76,7 @@ export class Computer {
     this.ram = new RAM16(this);
     this.adderSubtractor = new AdderSubtractor(this);
     this.controller = new ControlSequencer(this);
+    this.clock = new Clock(this);
   }
 
   clockTick() {
@@ -99,11 +101,14 @@ export class Computer {
     this.ir.update();
     this.out.update();
     this.ram.update();
-
   }
 
   clockTock() {
     this.controller.update();
+  }
+
+  startClock() {
+    this.clock.update();
   }
 
   resetControlLines() {

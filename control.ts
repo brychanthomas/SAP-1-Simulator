@@ -77,3 +77,19 @@ export class ControlSequencer extends Component {
     this.timeStep %= 7;
   }
 }
+
+export class Clock extends Component {
+  public level = 0;
+  public speed = 20; // Hertz (clock cycles per second)
+  update() {
+    this.level = Number(!this.level);
+    if (this.level === 0) {
+      this.computer.clockTock();
+    } else {
+      this.computer.clockTick();
+    }
+    if (this.computer.controlLines.hlt === 0) { //if computer not halted
+      setTimeout(this.update.bind(this), 1000/(this.speed*2));
+    }
+  }
+}
