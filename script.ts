@@ -21,3 +21,9 @@ computer.ram.program([
 ]);
 
 computer.startClock();
+
+setInterval(() => {
+  computerState.bus = computer.bus.lines
+  computerState.pc = computer.pc.state.slice().reverse().reduce(
+    (acc, val, idx) => acc + val * (2**idx));
+}, 50);

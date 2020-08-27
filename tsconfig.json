@@ -15,7 +15,8 @@
     "computer.ts",
     "script.ts",
     "component.ts",
-    "test.ts"
+    "test.ts",
+    "graphics.ts"
   ],
   "include": [
     "./types"
