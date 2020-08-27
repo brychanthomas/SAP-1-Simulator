@@ -1,5 +1,9 @@
 import { Component } from './component.js';
 
+/**
+ * Object that stores which control signals should be
+ * set at which time steps for different instructions.
+ */
 const MICROCODE = {
     '0000': {}, //NOP
     '0001': { //LDA
@@ -42,8 +46,19 @@ const MICROCODE = {
     }
   }
 
+/**
+ * A controller sequencer that sets the control lines
+ * based on the instruction currently being executed
+ * and the time step (and the flags for conditional
+ * jumps).
+ */
 export class ControlSequencer extends Component {
   private timeStep = 0;
+
+  /**
+   * Called on falling edge of clock to set the
+   * control signals for the next time step.
+   */
   update() {
     this.computer.resetControlLines();
     //steps 0 and 1 are the fetch part of the cycle
@@ -78,14 +93,27 @@ export class ControlSequencer extends Component {
   }
 }
 
+/**
+ * The clock calls the clockTock and clockTick methods
+ * on each falling and rising edge so that the computer
+ * can execute instructions. The speed (in hertz) is
+ * controlled by the 'speed' property.
+ */
 export class Clock extends Component {
   public level = 0;
   public speed = 20; // Hertz (clock cycles per second)
+
+  /**
+   * Updates the level of the clock (1 or 0) and
+   * calls clockTock and clockTick based on whether it
+   * is a falling or rising edge, then uses setTimeout
+   * so that update is called again later.
+   */
   update() {
     this.level = Number(!this.level);
-    if (this.level === 0) {
+    if (this.level === 0) { //falling edge
       this.computer.clockTock();
-    } else {
+    } else { //rising edge
       this.computer.clockTick();
     }
     if (this.computer.controlLines.hlt === 0) { //if computer not halted
