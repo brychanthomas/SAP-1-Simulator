@@ -1,9 +1,18 @@
 import { Computer } from "./computer.js";
 
+/**
+ * Class of static methods testing different components
+ * and instructions of the CPU.
+ */
 class UnitTests {
   static passCSS = 'background: #222; color: #bada55';
   static failCSS = 'background: #222; color: #ff6666';
 
+  /**
+   * Compares the actual output of a test with the expected
+   * output and writes a passed/failed message to the
+   * console accordingly.
+   */
   static compare(output: any, expected: any, testName: string) {
     if (JSON.stringify(output) === JSON.stringify(expected)) {
       console.log("%cPassed " + testName, UnitTests.passCSS);
