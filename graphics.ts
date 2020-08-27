@@ -15,7 +15,13 @@ var computerState = {
   set pc(state: Array<number>) {
     if (!state.every((val, idx) => val === this._pc[idx])) {
       this._pc = state;
-      drawPC(state, 600, 20);
+      drawPC(state, 600, 30);
+    }
+  },
+  set clock(state: number) {
+    if (state !== this._clock) {
+      this._clock = state;
+      drawClock(state, 10, 30);
     }
   }
 }
@@ -26,6 +32,13 @@ function setup()  {
 }
 
 class Draw {
+  static binary(binArray: Array<number>, x:number, y: number, colour: Array<number>) {
+    for (var i=0; i<binArray.length; i++) {
+      fill(colour.map((itm) => itm * binArray[i]));
+      circle(x+15*i, y, 10);
+    }
+  }
+
   static binaryAndNumerical(binArray: Array<number>, x: number, y: number, colour: Array<number>) {
     fill(0);
     textSize(25);
@@ -33,10 +46,7 @@ class Draw {
     var value = binArray.slice().reverse().reduce(
       (acc, val, idx) => acc + val * (2**idx));
     text(String(value), x, y);
-    for (var i=0; i<binArray.length; i++) {
-      fill(colour.map((itm) => itm * binArray[i]));
-      circle(x+5+15*i, y+10, 10);
-    }
+    Draw.binary(binArray, x+5, y+10, colour);
   }
 
   static rectangle(x: number, y: number, w: number, h: number) {
@@ -70,7 +80,7 @@ class Draw {
 function drawBus(bus: Array<number>, x: number, y: number) {
   noStroke();
   fill(255);
-  rect(x-95, y, 295, 100)
+  rect(x-94, y, 293, 100)
   strokeWeight(5);
   for (var i=0; i<8; i++) {
     stroke([0, 255*bus[i], 0]);
@@ -84,4 +94,21 @@ function drawPC(state: Array<number>, x: number, y: number) {
   fill(0);
   textSize(15);
   text("Program Counter", x, y-8);
+}
+
+function drawClock(state: number, x: number, y: number) {
+  Draw.rectangle(x, y, 75, 50);
+  fill(0);
+  noStroke();
+  textSize(15);
+  text("Clock", x, y-8);
+  textSize(20);
+  if (state === 1) {
+    text("High", x+15, y+25);
+    fill([255, 0, 255]);
+    circle(x+35, y+40, 10);
+  } else {
+    text("Low", x+15, y+25);
+    circle(x+35, y+40, 10);
+  }
 }

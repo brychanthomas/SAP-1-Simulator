@@ -24,6 +24,7 @@ computer.startClock();
 computer.clock.speed = 2;
 
 setInterval(() => {
-  computerState.bus = computer.bus.lines
-  computerState.pc = computer.pc.state
+  computerState.bus = computer.bus.lines;
+  computerState.pc = computer.pc.state;
+  computerState.clock = computer.clock.level;
 }, Math.max(50, 1000/(computer.clock.speed*2)));
