@@ -4,6 +4,11 @@ import { RAM16 } from './ram.js';
 import { AdderSubtractor } from './adder.js';
 import { ControlSequencer, Clock } from './control.js';
 
+/**
+ * Interface of object representing the control lines
+ * that carry control signals from the controller
+ * sequencer around the CPU.
+ */
 export interface ControlLines {
   hlt: number,
   mi: number,
@@ -23,8 +28,10 @@ export interface ControlLines {
   fi: number
 }
 
-//class to represent central 8 bit bus that components connect
-// to.
+/**
+ * Class to represent central 8 bit bus that components
+ * connect to.
+ */
 export class Bus8Bit {
   public lines: Array<number>;
 
@@ -32,23 +39,38 @@ export class Bus8Bit {
     this.lines = [0, 0, 0, 0, 0, 0, 0, 0];
   }
 
+  /**
+   * Sets the top (leftmost) 4 bits of the bus.
+   */
   set highNibble(nibble: Array<number>) {
     this.lines = nibble.concat(this.lines.slice(4));
   }
 
+  /**
+   * Gets the top (leftmost) 4 bits of the bus.
+   */
   get highNibble() {
     return this.lines.slice(0, 4);
   }
 
+  /**
+   * Sets the lowest (rightmost) 4 bits of the bus.
+   */
   set lowNibble(nibble: Array<number>) {
     this.lines = this.lines.slice(0, 4).concat(nibble);
   }
 
+  /**
+   * Gets the lowest (rightmost) 4 bits of the bus.
+   */
   get lowNibble() {
     return this.lines.slice(4);
   }
 }
 
+/**
+Class representing 8-bit SAP-1 CPU.
+*/
 export class Computer {
   public bus: Bus8Bit;
   public controlLines: ControlLines;
@@ -79,6 +101,11 @@ export class Computer {
     this.clock = new Clock(this);
   }
 
+  /**
+   * Called on 'rising edge' of clock - updates all of
+   * the components except the controller sequencer,
+   * which is updated on the falling edge.
+   */
   clockTick() {
     this.bus.lines = [0,0,0,0,0,0,0,0];
     // the adderSubtractor must be updated separately because
@@ -93,6 +120,9 @@ export class Computer {
     this.update();
   }
 
+  /**
+   * Called by clockTick to update the state of components.
+   */
   update() {
     this.pc.updateReadWrite();
     this.aRegister.update();
@@ -103,14 +133,27 @@ export class Computer {
     this.ram.update();
   }
 
+  /**
+   * Called on the falling edge of the clock to update
+   * the controller sequencer, which writes signals to
+   * controlLines.
+   */
   clockTock() {
     this.controller.update();
   }
 
+  /**
+   * Starts the clock at the clock speed in
+   * Computer.clock.speed.
+   */
   startClock() {
     this.clock.update();
   }
 
+
+  /**
+   * Resets all of the control lines to 0, or low.
+   */
   resetControlLines() {
     this.controlLines = {
       hlt: 0,
