@@ -16,12 +16,12 @@ class UnitTests {
     var c = new Computer();
     c.controlLines.ai = 1;
     c.bus.lines = [0,1,0,1,0,1,0,1];
-    c.clockTick();
+    c.update();
     UnitTests.compare(c.aRegister.contents, [0,1,0,1,0,1,0,1], "A register in");
     c.bus.lines = [0,0,0,0,0,0,0,0];
     c.controlLines.ai = 0;
     c.controlLines.ao = 1;
-    c.clockTick();
+    c.update();
     UnitTests.compare(c.bus.lines, [0,1,0,1,0,1,0,1], "A register out");
   }
 
@@ -29,16 +29,16 @@ class UnitTests {
     var c = new Computer();
     c.bus.lowNibble = [0, 0, 1, 0];
     c.controlLines.mi = 1;
-    c.clockTick();
+    c.update();
     UnitTests.compare(c.mar.address, 2, "MAR load");
     c.controlLines.mi = 0;
     c.bus.lines = [0,1,0,1,0,1,0,1];
     c.controlLines.ri = 1;
-    c.clockTick();
+    c.update();
     c.bus.lines = [0,0,0,0,0,0,0,0];
     c.controlLines.ri = 0;
     c.controlLines.ro = 1;
-    c.clockTick();
+    c.update();
     UnitTests.compare(c.bus.lines, [0,1,0,1,0,1,0,1], "RAM in/out");
   }
 
@@ -122,6 +122,35 @@ class UnitTests {
     }
     UnitTests.compare(c.pc.state, [0,1,1,0], "JMP instruction");
   }
+
+  static testConditionalJumps() {
+    var c = new Computer();
+    c.ram.registers[0].contents = [0,1,1,1, 1,1,1,1]; // JC 15
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    var output = c.pc.state;
+    c.flagsRegister.cf = 1;
+    c.ram.registers[1].contents = [0,1,1,1, 1,1,1,1]; // JC 15
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    output = output.concat(c.pc.state);
+    UnitTests.compare(output, [0,0,0,1, 1,1,1,1], "JC instruction");
+    var c = new Computer();
+    c.ram.registers[0].contents = [1,0,0,0, 1,1,1,1]; // JZ 15
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    var output = c.pc.state;
+    c.flagsRegister.zf = 1;
+    c.ram.registers[1].contents = [1,0,0,0, 1,1,1,1]; // JZ 15
+    for (var i=0; i<7; i++) {
+      c.clockTock(); c.clockTick();
+    }
+    output = output.concat(c.pc.state);
+    UnitTests.compare(output, [0,0,0,1, 1,1,1,1], "JZ instruction");
+  }
 }
 
 UnitTests.testARegister();
@@ -130,3 +159,4 @@ UnitTests.testAdderSubtractor();
 UnitTests.testInstructionFetch();
 UnitTests.testBasicInstructions();
 UnitTests.testExtraInstructions();
+UnitTests.testConditionalJumps();
