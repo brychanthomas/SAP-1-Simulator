@@ -1,6 +1,17 @@
 import { Component } from './component.js';
 
+/**
+ * Adds or subtracts the contents of the A register
+ * and the B register.
+ */
 export class AdderSubtractor extends Component {
+  /**
+   * Adds or subtracts (based on subtract control signal)
+   * the contents of the A register with the contents of
+   * the B register and outputs result to bus if
+   * sum out control signal is set. Also sets the
+   * flags register if flags in control signal is set.
+   */
   update() {
     var a = this.computer.aRegister.contents.slice().reverse().reduce(
       (acc, val, idx) => acc + val * (2**idx)); //convert to number
