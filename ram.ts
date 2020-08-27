@@ -2,6 +2,10 @@ import { Register8Bit } from './registers.js';
 import type { Computer } from './computer.js';
 import { Component } from './component.js'
 
+/**
+ * A Register that forms a part of the RAM - has a
+ * numerical address as well as its contents.
+ */
 class RAMRegister extends Register8Bit {
   public address: number;
 
@@ -10,6 +14,11 @@ class RAMRegister extends Register8Bit {
     this.address = address;
   }
 
+  /**
+   * If this register is selected by the memory address
+   * register this RAM register is controlled by the
+   * ram out and ram in control signals.
+   */
   update() {
     if (this.computer.mar.address === this.address) {
       if  (this.computer.controlLines.ro === 1) {
@@ -22,6 +31,9 @@ class RAMRegister extends Register8Bit {
   }
 }
 
+/**
+ * 16 bytes of RAM created using 15 RAMRegisters.
+ */
 export class RAM16 extends Component {
   public registers: Array<RAMRegister>;
   constructor(computer: Computer) {
@@ -32,12 +44,19 @@ export class RAM16 extends Component {
     }
   }
 
+  /**
+   * Call the update method on every register.
+   */
   update() {
     for (var reg of this.registers) {
       reg.update();
     }
   }
 
+  /**
+   * Takes an array of 8-bit arrays and stores each
+   * byte into consecutive RAM addresses, starting at 0.
+   */
   program(data: Array<Array<number>>) {
     for (var byte=0; byte<data.length; byte++) {
       this.registers[byte].contents = data[byte];
