@@ -31,6 +31,7 @@ var computerState = {
   _ir: [1,0,0,0,0,0,0,0],
   _ctrl: {},
   _time: 1,
+  _flags: '',
   set bus(bus: Array<number>) {
     this._bus = bus;
     drawBus(bus, 400, 10);
@@ -102,11 +103,17 @@ var computerState = {
       this._time = (state+5) % 6;
       drawController(this._ctrl, 30, 700);
     }
+  },
+  set flags(state: string) {
+    if (state !== this._flags) {
+      this._flags = state;
+      drawFlagsRegister(state, 750, 380);
+    }
   }
 }
 
 function setup()  {
-  createCanvas(800, 800);
+  createCanvas(900, 800);
   background(255);
 }
 
@@ -320,6 +327,20 @@ function drawController(state: object, x: number, y: number) {
   fill(0);
   textSize(15);
   text("Controller sequencer", x, y-7);
+}
+
+function drawFlagsRegister(flags: string, x: number, y: number) {
+  Draw.rectangle(x, y, 50, 40);
+  noStroke();
+  Draw.binary([Number(flags[0])], x+10, y+10, [255, 125, 0]);
+  Draw.binary([Number(flags[1])], x+10, y+30, [255, 125, 0]);
+  textSize(12);
+  fill(0);
+  text("carry", x+20, y+15);
+  text("zero", x+20, y+35);
+  textSize(15);
+  text("Flags register", x+25, y-8);
+  Draw.verticalConnections([Number(flags[0]), Number(flags[1])], 760, 342, 378);
 }
 
 function drawBusConnections(ctrl: object) {

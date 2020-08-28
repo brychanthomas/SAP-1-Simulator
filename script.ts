@@ -30,6 +30,7 @@ setInterval(() => {
   computerState.clock = computer.clock.level;
   computerState.aRegister = computer.aRegister.contents;
   computerState.adder = computer.adderSubtractor.output;
+  computerState.flags = computer.flagsRegister.flags;
   computerState.bRegister = computer.bRegister.contents;
   computerState.output = computer.out.contents;
   computerState.mar = computer.mar.contents;
