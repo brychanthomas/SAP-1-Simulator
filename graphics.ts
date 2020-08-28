@@ -1,6 +1,20 @@
 // The x position of components on the left side of the bus should
 // be 305 - (width of component)
 
+const binaryToInstuction = {
+  '0000': 'NOP',
+  '0001': 'LDA',
+  '0010': 'ADD',
+  '0011': 'SUB',
+  '0100': 'STA',
+  '0101': 'LDI',
+  '0110': 'JMP',
+  '0111': 'JC',
+  '1000': 'JZ',
+  '1110': 'OUT',
+  '1111': 'HLT'
+}
+
 /**
 Object that calls relevant graphics functions whenever the
 state of a tracked computer part changes.
@@ -262,11 +276,18 @@ function drawRAM(state: Array<Array<number>>, x: number, y: number) {
 function drawInstructionRegister(state: Array<number>, x: number, y: number) {
   Draw.rectangle(x, y, 135, 90);
   noStroke();
+  textSize(20);
+  fill([0, 0, 255]);
+  text(binaryToInstuction[state.slice(0, 4).join('')], x+20, y+35);
+  var operand  = state.slice(4).reverse().reduce(
+    (acc, val, idx) => acc + val * (2**idx));
+  fill([255,125,0])
+  text(String(operand), x+85, y+35);
   fill(0);
   textSize(15);
   text("Instruction register", x, y-8);
-  Draw.binary(state.slice(0,4), x+15, y+15, [0, 0, 255]);
-  Draw.binary(state.slice(4), x+75, y+15, [255, 125, 0]);
+  Draw.binary(state.slice(0,4), x+15, y+60, [0, 0, 255]);
+  Draw.binary(state.slice(4), x+75, y+60, [255, 125, 0]);
 }
 
 function drawController(state: object, x: number, y: number) {
