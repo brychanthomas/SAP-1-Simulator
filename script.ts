@@ -21,7 +21,7 @@ computer.ram.program([
 ]);
 
 computer.startClock();
-computer.clock.speed = 2;
+computer.clock.speed = 6;
 
 setInterval(() => {
   computerState.bus = computer.bus.lines;

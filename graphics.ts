@@ -34,7 +34,7 @@ var computerState = {
   _flags: '',
   set bus(bus: Array<number>) {
     this._bus = bus;
-    drawBus(bus, 400, 10);
+    drawBus(bus, 400, 20);
     drawBusConnections(this._ctrl);
   },
   set pc(state: Array<number>) {
@@ -188,16 +188,26 @@ class Draw {
       line(x+8*i, y1, x+8*i, y2);
     }
   }
+
+  static title(title: string, x: number, y: number) {
+    fill(255);
+    rect(x, y-15, 8.5*title.length, 20);
+    fill(0);
+    text(title, x, y);
+  }
 }
 
 function drawBus(bus: Array<number>, x: number, y: number) {
   noStroke();
   fill(255);
-  rect(x-94, y, 293, 800)
+  rect(x-94, y-10, 293, 800)
+  textSize(15);
+  fill(0);
+  Draw.title("Bus", 440, 12);
   strokeWeight(5);
   for (var i=0; i<8; i++) {
     stroke([0, 255*bus[i], 0]);
-    line(x+15*i, y, x+15*i, y+770);
+    line(x+15*i, y, x+15*i, y+750);
   }
 }
 
@@ -208,7 +218,7 @@ function drawRegister4Bit(state: Array<number>, x: number, y: number, name: stri
   textSize(15);
   noStroke();
   namexOffset = namexOffset || 0;
-  text(name, x+namexOffset, y-8);
+  Draw.title(name, x+namexOffset, y-8);
 }
 
 function drawClock(state: number, x: number, y: number) {
@@ -216,7 +226,7 @@ function drawClock(state: number, x: number, y: number) {
   fill(0);
   noStroke();
   textSize(15);
-  text("Clock", x, y-8);
+  Draw.title("Clock", x, y-8);
   textSize(20);
   if (state === 1) {
     text("High", x+15, y+25);
@@ -234,7 +244,7 @@ function drawRegister8Bit(state: Array<number>, x: number, y: number, name: stri
   textSize(15);
   fill(0);
   namexOffset = namexOffset || 0;
-  text(name, x+namexOffset, y-8);
+  Draw.title(name, x+namexOffset, y-8);
 }
 
 function drawAdder(state: Array<number>, x: number, y: number) {
@@ -246,7 +256,7 @@ function drawAdder(state: Array<number>, x: number, y: number) {
   else {text("A + B", x+10, y+70)}
   textSize(15);
   fill(0);
-  text("Adder / Subtractor", x+70, y-8);
+  Draw.title("Adder / Subtractor", x+70, y-8);
 }
 
 function drawOutput(state: Array<number>, x: number, y: number) {
@@ -255,7 +265,7 @@ function drawOutput(state: Array<number>, x: number, y: number) {
   Draw.binary(state, x+25, y+70, [255, 0, 0]);
   textSize(15);
   fill(0);
-  text("Output register", x, y-8);
+  Draw.title("Output register", x, y-8);
   fill(150);
   rect(x+25, y+5, 100, 50);
   fill([255, 0, 0]);
@@ -281,7 +291,7 @@ function drawRAM(state: Array<Array<number>>, x: number, y: number) {
     Draw.binary(state[i], x+70, y+10+i*20, [255,125,0]);
   }
   fill(0);
-  text("Random access memory", x-10, y-8);
+  Draw.title("Random access memory", x-10, y-8);
 }
 
 function drawInstructionRegister(state: Array<number>, x: number, y: number) {
@@ -296,7 +306,7 @@ function drawInstructionRegister(state: Array<number>, x: number, y: number) {
   text(String(operand), x+85, y+35);
   fill(0);
   textSize(15);
-  text("Instruction register", x, y-8);
+  Draw.title("Instruction register", x, y-8);
   Draw.binary(state.slice(0,4), x+15, y+60, [0, 0, 255]);
   Draw.binary(state.slice(4), x+75, y+60, [255, 125, 0]);
 }
@@ -326,7 +336,7 @@ function drawController(state: object, x: number, y: number) {
   text("execute", x+48, y+47);
   fill(0);
   textSize(15);
-  text("Controller sequencer", x, y-7);
+  Draw.title("Controller sequencer", x, y-7);
 }
 
 function drawFlagsRegister(flags: string, x: number, y: number) {
@@ -339,7 +349,7 @@ function drawFlagsRegister(flags: string, x: number, y: number) {
   text("carry", x+20, y+15);
   text("zero", x+20, y+35);
   textSize(15);
-  text("Flags register", x+25, y-8);
+  Draw.title("Flags register", x+25, y-8);
   Draw.verticalConnections([Number(flags[0]), Number(flags[1])], 760, 342, 378);
 }
 
@@ -361,5 +371,4 @@ function drawBusConnections(ctrl: object) {
   if (ctrl['so'] === 1) { Draw.busConnection(598, 250, 'l'); }
   if (ctrl['bi'] === 1) { Draw.busConnection(598, 380, 'r'); }
   if (ctrl['oi'] === 1) { Draw.busConnection(598, 510, 'r'); }
-
 }
