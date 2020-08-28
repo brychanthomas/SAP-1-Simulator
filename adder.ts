@@ -5,6 +5,7 @@ import { Component } from './component.js';
  * and the B register.
  */
 export class AdderSubtractor extends Component {
+  public output = [0,0,0,0,0,0,0,0];
   /**
    * Adds or subtracts (based on subtract control signal)
    * the contents of the A register with the contents of
@@ -21,9 +22,10 @@ export class AdderSubtractor extends Component {
     if (this.computer.controlLines.su === 1) { // Subtract
       out = a - b;
     }
+    var outArr = (out >>> 0).toString(2).padStart(8, '0').split('').slice(-8).map(x=>+x);
+    this.output  = outArr;
     if (this.computer.controlLines.so === 1) { // Sum out
-      this.computer.bus.lines =
-        (out >>> 0).toString(2).padStart(8, '0').split('').slice(-8).map(x=>+x);
+      this.computer.bus.lines = outArr;
     }
     if (this.computer.controlLines.fi === 1) { // Flags in
       this.computer.flagsRegister.cf = Number((out >>> 0).toString(2).padStart(9, '0')[0]);
