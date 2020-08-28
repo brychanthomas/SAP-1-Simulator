@@ -1,3 +1,6 @@
+// The x position of components on the left side of the bus should
+// be 305 - (width of component)
+
 /**
 Object that calls relevant graphics functions whenever the
 state of a tracked computer part changes.
@@ -9,6 +12,7 @@ var computerState = {
   _adder: [1,0,0,0,0,0,0,0],
   _bRegister: [1,0,0,0,0,0,0,0],
   _output: [1,0,0,0,0,0,0,0,0],
+  _mar: [1,0,0,0],
   set bus(bus: Array<number>) {
     if (!bus.every((val, idx) => val === this._bus[idx])) {
       this._bus = bus;
@@ -24,7 +28,7 @@ var computerState = {
   set clock(state: number) {
     if (state !== this._clock) {
       this._clock = state;
-      drawClock(state, 10, 30);
+      drawClock(state, 230, 30);
     }
   },
   set aRegister(state: Array<number>) {
@@ -51,6 +55,12 @@ var computerState = {
     if (!state.every((val, idx) => val === this._output[idx])) {
       this._output = state;
       drawOutput(state, 600, 510);
+    }
+  },
+  set mar(state: Array<number>) {
+    if (!state.every((val, idx) => val === this._mar[idx])) {
+      this._mar = state;
+      drawRegister4Bit(state, 230, 120, "Memory address register", -90);
     }
   }
 }
@@ -143,13 +153,14 @@ function drawBus(bus: Array<number>, x: number, y: number) {
   }
 }
 
-function drawRegister4Bit(state: Array<number>, x: number, y: number, name: string) {
+function drawRegister4Bit(state: Array<number>, x: number, y: number, name: string, namexOffset?: number) {
   Draw.rectangle(x, y, 75, 50);
   Draw.binaryAndNumerical(state, x+10, y+25, [255,125,0]);
   fill(0);
   textSize(15);
   noStroke();
-  text(name, x, y-8);
+  namexOffset = namexOffset || 0;
+  text(name, x+namexOffset, y-8);
 }
 
 function drawClock(state: number, x: number, y: number) {
