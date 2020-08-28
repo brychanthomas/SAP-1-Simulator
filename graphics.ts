@@ -32,10 +32,9 @@ var computerState = {
   _ctrl: {},
   _time: 1,
   set bus(bus: Array<number>) {
-    if (!bus.every((val, idx) => val === this._bus[idx])) {
-      this._bus = bus;
-      drawBus(bus, 400, 10);
-    }
+    this._bus = bus;
+    drawBus(bus, 400, 10);
+    drawBusConnections(this._ctrl);
   },
   set pc(state: Array<number>) {
     if (!state.every((val, idx) => val === this._pc[idx])) {
@@ -157,7 +156,8 @@ class Draw {
       line(460+15*i, y-10*i+40, x, y-10*i+40);
       circle(460+15*i, y-10*i+40, 5);
     }
-    Draw.arrow(x, y-10, dataDir);
+    var arrowX = (x < 400)? 350 : 550;
+    Draw.arrow(arrowX, y-10, dataDir);
   }
 
   static busConnection(x: number, y: number, dataDir?: 'r'|'l') {
@@ -169,7 +169,7 @@ class Draw {
       line(400+15*i, y-10*i+80, x, y-10*i+80);
       circle(400+15*i, y-10*i+80, 5);
     }
-    var arrowX = (490+x)/2;
+    var arrowX = (x < 400)? 350 : 550;
     Draw.arrow(arrowX, y-10, dataDir);
   }
 
@@ -316,4 +316,25 @@ function drawController(state: object, x: number, y: number) {
   fill(0);
   textSize(15);
   text("Controller sequencer", x, y-7);
+}
+
+function drawBusConnections(ctrl: object) {
+  if (ctrl['j'] === 1 || ctrl['co'] === 1) {
+    Draw.lowNibbleConnection(598, 30, (ctrl['j'] === 1)? 'r' : 'l');
+  }
+  if (ctrl['mi'] === 1) {
+    Draw.lowNibbleConnection(307, 120, 'l');
+  }
+  if (ctrl['ri'] === 1 || ctrl['ro'] === 1) {
+    Draw.busConnection(307, 210, (ctrl['ro'] === 1)? 'r' : 'l');
+  }
+  if (ctrl['ii'] === 1) { Draw.busConnection(307, 570, 'l'); }
+  if (ctrl['io'] === 1) { Draw.lowNibbleConnection(307, 570, 'r'); }
+  if (ctrl['ai'] || ctrl['ao']) {
+    Draw.busConnection(598, 120, (ctrl['ai'] === 1)? 'r' : 'l');
+  }
+  if (ctrl['so'] === 1) { Draw.busConnection(598, 250, 'l'); }
+  if (ctrl['bi'] === 1) { Draw.busConnection(598, 380, 'r'); }
+  if (ctrl['oi'] === 1) { Draw.busConnection(598, 510, 'r'); }
+
 }
