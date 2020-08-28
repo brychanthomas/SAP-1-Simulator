@@ -62,4 +62,16 @@ export class RAM16 extends Component {
       this.registers[byte].contents = data[byte];
     }
   }
+
+  /**
+   * Returns an array of 8-bit arrays with the contents of all
+   * registers.
+   */
+  get contents() {
+    var c = [];
+    for (var i=0; i<this.registers.length; i++) {
+      c.push(this.registers[i].contents);
+    }
+    return c;
+  }
 }

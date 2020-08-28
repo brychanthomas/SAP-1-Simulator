@@ -13,6 +13,7 @@ var computerState = {
   _bRegister: [1,0,0,0,0,0,0,0],
   _output: [1,0,0,0,0,0,0,0,0],
   _mar: [1,0,0,0],
+  _ram: [[0]],
   set bus(bus: Array<number>) {
     if (!bus.every((val, idx) => val === this._bus[idx])) {
       this._bus = bus;
@@ -61,6 +62,13 @@ var computerState = {
     if (!state.every((val, idx) => val === this._mar[idx])) {
       this._mar = state;
       drawRegister4Bit(state, 230, 120, "Memory address register", -90);
+      Draw.verticalConnections(state, 275, 172, 208);
+    }
+  },
+  set ram(state: Array<Array<number>>) {
+    if (JSON.stringify(this._ram) !== JSON.stringify(state)) {
+      this._ram = state;
+      drawRAM(state, 105, 210);
     }
   }
 }
@@ -211,4 +219,23 @@ function drawOutput(state: Array<number>, x: number, y: number) {
   var value = state.slice().reverse().reduce(
     (acc, val, idx) => acc + val * (2**idx));
   text(String(value), x+27, y+45);
+}
+
+function drawRAM(state: Array<Array<number>>, x: number, y: number) {
+  Draw.rectangle(x, y, 200, 320);
+  textSize(15);
+  fill(0);
+  strokeWeight(2);
+  line(x+30, y, x+30, y+320);
+  noStroke();
+  for (var i=0; i<state.length; i++) {
+    fill(0);
+    text(String(i)+':', x+5, y+15+i*20);
+    var dec  = state[i].slice().reverse().reduce(
+      (acc, val, idx) => acc + val * (2**idx));
+    text(dec.toString(16).toUpperCase(), x+40, y+15+i*20);
+    Draw.binary(state[i], x+70, y+10+i*20, [255,125,0]);
+  }
+  fill(0);
+  text("Random access memory", x-10, y-8);
 }
