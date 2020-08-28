@@ -8,6 +8,7 @@ var computerState = {
   _aRegister: [1,0,0,0,0,0,0,0],
   _adder: [1,0,0,0,0,0,0,0],
   _bRegister: [1,0,0,0,0,0,0,0],
+  _output: [1,0,0,0,0,0,0,0,0],
   set bus(bus: Array<number>) {
     if (!bus.every((val, idx) => val === this._bus[idx])) {
       this._bus = bus;
@@ -45,11 +46,17 @@ var computerState = {
       drawRegister8Bit(state, 600, 380, "B register", 70);
       Draw.verticalConnections(state, 605, 342, 378);
     }
+  },
+  set output(state: Array<number>) {
+    if (!state.every((val, idx) => val === this._output[idx])) {
+      this._output = state;
+      drawOutput(state, 600, 510);
+    }
   }
 }
 
 function setup()  {
-  createCanvas(800, 500);
+  createCanvas(800, 600);
   background(255);
 }
 
@@ -177,4 +184,20 @@ function drawAdder(state: Array<number>, x: number, y: number) {
   textSize(15);
   fill(0);
   text("Adder / Subtractor", x+70, y-8);
+}
+
+function drawOutput(state: Array<number>, x: number, y: number) {
+  Draw.rectangle(x, y, 150, 90);
+  noStroke();
+  Draw.binary(state, x+25, y+70, [255, 0, 0]);
+  textSize(15);
+  fill(0);
+  text("Output register", x, y-8);
+  fill(150);
+  rect(x+25, y+5, 100, 50);
+  fill([255, 0, 0]);
+  textSize(50);
+  var value = state.slice().reverse().reduce(
+    (acc, val, idx) => acc + val * (2**idx));
+  text(String(value), x+27, y+45);
 }

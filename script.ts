@@ -30,4 +30,5 @@ setInterval(() => {
   computerState.aRegister = computer.aRegister.contents;
   computerState.adder = computer.adderSubtractor.output;
   computerState.bRegister = computer.bRegister.contents;
+  computerState.output = computer.out.contents;
 }, Math.max(50, 1000/(computer.clock.speed*2)));
