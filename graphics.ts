@@ -1,6 +1,7 @@
-// The x position of components on the left side of the bus should
-// be 305 - (width of component)
-
+/**
+Object used by the instruction register graphics to display the
+instruction currently being executed.
+*/
 const binaryToInstuction = {
   '0000': 'NOP',
   '0001': 'LDA',
@@ -109,14 +110,28 @@ var computerState = {
       this._flags = state;
       drawFlagsRegister(state, 750, 380);
     }
+  },
+  set clockSpeed(speed: number) {
+    textSize(15); noStroke(); fill(0);
+    Draw.title("Clock speed: "+speed+" Hz", 17, 50);
   }
 }
 
+var slider:p5.Element;
+
+/**
+Called by p5.js when the page has loaded - creates the canvas.
+*/
 function setup()  {
   createCanvas(900, 800);
   background(255);
+  slider = createSlider(0.1, 20, 6, 0.1);
+  slider.position(20, 20);
 }
 
+/**
+Class of static functions for drawing common graphics.
+*/
 class Draw {
   static binary(binArray: Array<number>, x:number, y: number, colour: Array<number>) {
     for (var i=0; i<binArray.length; i++) {

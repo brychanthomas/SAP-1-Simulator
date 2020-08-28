@@ -1711,6 +1711,10 @@ declare namespace p5 {
   // src/core/p5.Element.js
   
   class Element {
+    position(arg0: number, arg1: number) {
+      throw new Error("Method not implemented.")
+    }
+    value: any
     /**
      * Base class for all elements added to a sketch, including canvas,
      * graphics buffers, and other HTML elements.

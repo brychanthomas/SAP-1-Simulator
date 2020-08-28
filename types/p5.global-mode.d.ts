@@ -1602,8 +1602,8 @@ declare function removeElements(): void;
 // TODO: Fix createSlider() errors in lib/addons/p5.dom.js:
 //
 //   return has invalid type: Object/p5.Element
-//
-// declare function createSlider(min: number, max: number, value?: number): Object/p5.Element;
+
+declare function createSlider(min: number, max: number, value?: number, step?: number): p5.Element;
 
 // TODO: Fix createButton() errors in lib/addons/p5.dom.js:
 //
