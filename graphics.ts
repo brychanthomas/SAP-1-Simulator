@@ -233,6 +233,10 @@ function drawRegister8Bit(state: Array<number>, x: number, y: number, name: stri
 function drawAdder(state: Array<number>, x: number, y: number) {
   Draw.rectangle(x, y, 180, 90);
   Draw.binaryAndNumerical(state, x+10, y+25, [255,125,0]);
+  fill([0, 0, 255]);
+  textSize(20);
+  if (computerState._ctrl['su'] === 1) {text("A - B", x+10, y+70)}
+  else {text("A + B", x+10, y+70)}
   textSize(15);
   fill(0);
   text("Adder / Subtractor", x+70, y-8);
