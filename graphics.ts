@@ -14,6 +14,9 @@ var computerState = {
   _output: [1,0,0,0,0,0,0,0,0],
   _mar: [1,0,0,0],
   _ram: [[0]],
+  _ir: [1,0,0,0,0,0,0,0],
+  _ctrl: {},
+  _time: 1,
   set bus(bus: Array<number>) {
     if (!bus.every((val, idx) => val === this._bus[idx])) {
       this._bus = bus;
@@ -70,11 +73,27 @@ var computerState = {
       this._ram = state;
       drawRAM(state, 105, 210);
     }
+  },
+  set ir(state: Array<number>) {
+    if (!state.every((val, idx) => val === this._mar[idx])) {
+      this._ir = state;
+      drawInstructionRegister(state, 170, 570);
+      Draw.verticalConnections(state.slice(0,4), 275, 662, 698, [0,0,255]);
+    }
+  },
+  set ctrl(state: object) {
+    this._ctrl = state;
+  },
+  set time(state: number) {
+    if ((state+5)%6 !== this._time) {
+      this._time = (state+5) % 6;
+      drawController(this._ctrl, 30, 700);
+    }
   }
 }
 
 function setup()  {
-  createCanvas(800, 600);
+  createCanvas(800, 800);
   background(255);
 }
 
@@ -140,11 +159,11 @@ class Draw {
     Draw.arrow(arrowX, y-10, dataDir);
   }
 
-  static verticalConnections(state: Array<number>, x: number, y1: number, y2: number) {
+  static verticalConnections(state: Array<number>, x: number, y1: number, y2: number, col?: Array<number>) {
     strokeWeight(3);
+    col = col || [255, 125, 0];
     for (var i=0; i<state.length; i++) {
-      stroke([255*state[i], 125*state[i], 0]);
-      fill([0, 255*state[i], 0]);
+      stroke([col[0]*state[i], col[1]*state[i], col[2]*state[i]]);
       line(x+8*i, y1, x+8*i, y2);
     }
   }
@@ -153,11 +172,11 @@ class Draw {
 function drawBus(bus: Array<number>, x: number, y: number) {
   noStroke();
   fill(255);
-  rect(x-94, y, 293, 100)
+  rect(x-94, y, 293, 800)
   strokeWeight(5);
   for (var i=0; i<8; i++) {
     stroke([0, 255*bus[i], 0]);
-    line(x+15*i, y, x+15*i, y+100);
+    line(x+15*i, y, x+15*i, y+770);
   }
 }
 
@@ -238,4 +257,42 @@ function drawRAM(state: Array<Array<number>>, x: number, y: number) {
   }
   fill(0);
   text("Random access memory", x-10, y-8);
+}
+
+function drawInstructionRegister(state: Array<number>, x: number, y: number) {
+  Draw.rectangle(x, y, 135, 90);
+  noStroke();
+  fill(0);
+  textSize(15);
+  text("Instruction register", x, y-8);
+  Draw.binary(state.slice(0,4), x+15, y+15, [0, 0, 255]);
+  Draw.binary(state.slice(4), x+75, y+15, [255, 125, 0]);
+}
+
+function drawController(state: object, x: number, y: number) {
+  Draw.rectangle(x, y, 275, 100);
+  var signals = Object.keys(state);
+  noStroke();
+  textSize(12);
+  textAlign(CENTER);
+  for (var i=0; i<signals.length; i++) {
+    Draw.binary([state[signals[i]]], x+10+i*17, y+85, [0,0,255]);
+    text(signals[i], x+10+i*17, y+75);
+  }
+  for (var i=0; i<6; i++) {
+    Draw.binary([Number(i === computerState._time)], x+10+i*17, y+25, [255, 0, 255]);
+    text('T'+i, x+10+i*17, y+15);
+  }
+  textAlign(LEFT);
+  strokeWeight(1);
+  stroke(100);
+  fill(100);
+  line(x+7, y+35, x+30, y+35);
+  line(x+41, y+35, x+98, y+35);
+  noStroke();
+  text("fetch", x+5, y+47);
+  text("execute", x+48, y+47);
+  fill(0);
+  textSize(15);
+  text("Controller sequencer", x, y-7);
 }

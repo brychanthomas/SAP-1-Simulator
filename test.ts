@@ -89,24 +89,24 @@ class UnitTests {
     var c = new Computer();
     c.ram.registers[0].contents = [0,0,0,1, 1,1,1,1]; //LDA 15
     c.ram.registers[15].contents = [0,1,0,1,0,1,0,1];
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     UnitTests.compare(c.aRegister.contents, [0,1,0,1,0,1,0,1], "LDA instruction");
     c.ram.registers[14].contents = [0,0,0,0,0,0,0,1];
     c.ram.registers[1].contents = [0,0,1,0, 1,1,1,0]; //ADD 14
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     UnitTests.compare(c.aRegister.contents, [0,1,0,1,0,1,1,0], "ADD instruction");
     c.ram.registers[13].contents = [0,0,1,0,0,0,0,0];
     c.ram.registers[2].contents = [0,0,1,1, 1,1,0,1] // SUB 13
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     UnitTests.compare(c.aRegister.contents, [0,0,1,1,0,1,1,0], "SUB instruction");
     c.ram.registers[3].contents = [1,1,1,0, 0,0,0,0] // OUT
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     UnitTests.compare(c.out.contents, [0,0,1,1,0,1,1,0], "OUT instruction");
@@ -116,17 +116,17 @@ class UnitTests {
     var c = new Computer();
     c.aRegister.contents = [0,1,0,1,0,1,0,1];
     c.ram.registers[0].contents = [0,1,0,0, 1,1,1,1] // STA 15
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     UnitTests.compare(c.ram.registers[15].contents, [0,1,0,1,0,1,0,1], "STA instruction");
     c.ram.registers[1].contents = [0,1,0,1, 0,0,1,1]; // LDI 3
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     UnitTests.compare(c.aRegister.contents, [0,0,0,0,0,0,1,1], "LDI instruction");
     c.ram.registers[2].contents = [0,1,1,0, 0,1,1,0]; // JMP 6
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     UnitTests.compare(c.pc.state, [0,1,1,0], "JMP instruction");
@@ -135,26 +135,26 @@ class UnitTests {
   static testConditionalJumps() {
     var c = new Computer();
     c.ram.registers[0].contents = [0,1,1,1, 1,1,1,1]; // JC 15
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     var output = c.pc.state;
     c.flagsRegister.cf = 1;
     c.ram.registers[1].contents = [0,1,1,1, 1,1,1,1]; // JC 15
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     output = output.concat(c.pc.state);
     UnitTests.compare(output, [0,0,0,1, 1,1,1,1], "JC instruction");
     var c = new Computer();
     c.ram.registers[0].contents = [1,0,0,0, 1,1,1,1]; // JZ 15
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     var output = c.pc.state;
     c.flagsRegister.zf = 1;
     c.ram.registers[1].contents = [1,0,0,0, 1,1,1,1]; // JZ 15
-    for (var i=0; i<7; i++) {
+    for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
     output = output.concat(c.pc.state);

@@ -53,7 +53,7 @@ const MICROCODE = {
  * jumps).
  */
 export class ControlSequencer extends Component {
-  private timeStep = 0;
+  public timeStep = 0;
 
   /**
    * Called on falling edge of clock to set the
@@ -89,7 +89,7 @@ export class ControlSequencer extends Component {
       }
     }
     this.timeStep++;
-    this.timeStep %= 7;
+    this.timeStep %= 6;
   }
 }
 
