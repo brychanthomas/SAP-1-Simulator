@@ -174,7 +174,7 @@ export class ProgramCounter extends Component {
       let value = this.state.slice().reverse().reduce(
         (acc, val, idx) => acc + val * (2**idx)); //convert to number
       value++; //increment number
-      value %= 15;
+      value %= 16;
       //convert number back to array of 4 bits
       this.state = (value >>> 0).toString(2).padStart(4, '0').split('').slice(-4).map(x=>+x);
     }

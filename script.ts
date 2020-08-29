@@ -4,21 +4,7 @@
 import { Computer } from "./computer.js";
 
 var computer = new Computer();
-computer.ram.program([
-  [0,1,0,1, 0,0,0,1], // LDI 1
-  [0,1,0,0, 1,1,1,0], // STA 14
-  [0,1,0,1, 0,0,0,0], // LDI 0
-  [0,1,0,0, 1,1,1,1], // STA 15
-  [1,1,1,0, 0,0,0,0], // OUT
-  [0,0,0,1, 1,1,1,0], // LDA 14
-  [0,0,1,0, 1,1,1,1], // ADD 15
-  [0,1,0,0, 1,1,1,0], // STA 14
-  [1,1,1,0, 0,0,0,0], // OUT
-  [0,0,0,1, 1,1,1,1], // LDA 15
-  [0,0,1,0, 1,1,1,0], // ADD 14
-  [0,1,1,1, 0,0,0,0], // JC 0
-  [0,1,1,0, 0,0,1,1]  // JMP 3
-]);
+computer.ram.program(assemble(default_program));
 
 computer.startClock();
 computer.clock.speed = 6;

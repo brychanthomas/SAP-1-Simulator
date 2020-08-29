@@ -20,18 +20,16 @@ const binaryToInstuction = {
 /**
 The assembly program running when the page loads.
 */
-var default_program = `LDI 1
+var default_program = `LDI 0
 STA 14
-LDI 0
+LDI 1
 STA 15
 OUT
-LDA 14
-ADD 15
-STA 14
-OUT
-LDA 15
 ADD 14
+STA 14
 JC 0
+OUT
+ADD 15
 JMP 3`
 
 /**
