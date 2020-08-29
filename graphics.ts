@@ -157,7 +157,8 @@ function setup()  {
   slider.position(20, 20);
   programBox = createElement('textarea', default_program);
   programBox.position(900, 100);
-  programBox.size(70, 256);
+  programBox.size(70, 250);
+  programBox.style('resize', 'none');
   assembleButton = createButton("Restart and write to RAM");
   assembleButton.position(900, 370);
   assembleButton.mousePressed(() => newProgram = true);

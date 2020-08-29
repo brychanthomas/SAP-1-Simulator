@@ -175,6 +175,9 @@ export class Computer {
     }
   }
 
+  /**
+   * Resets all of the computer components to their original states.
+   */
   reset() {
     this.resetControlLines();
     this.aRegister.contents = [0,0,0,0,0,0,0,0];
@@ -186,5 +189,6 @@ export class Computer {
     this.flagsRegister.flags = '00';
     this.ir.contents = [0,0,0,0,0,0,0,0];
     this.out.contents = [0,0,0,0,0,0,0,0];
+    this.ram.clear();
   }
 }

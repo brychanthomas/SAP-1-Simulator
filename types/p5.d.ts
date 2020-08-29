@@ -1711,6 +1711,12 @@ declare namespace p5 {
   // src/core/p5.Element.js
 
   class Element {
+    attribute(arg0: string, arg1: number) {
+      throw new Error("Method not implemented.")
+    }
+    style(arg0: string, arg1: string) {
+      throw new Error("Method not implemented.")
+    }
     size(width: number, height: number): any;
     position(x: number, y: number): any;
     value: any

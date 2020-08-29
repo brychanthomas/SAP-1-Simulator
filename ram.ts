@@ -58,7 +58,7 @@ export class RAM16 extends Component {
    * byte into consecutive RAM addresses, starting at 0.
    */
   program(data: Array<Array<number>>) {
-    for (var byte=0; byte<data.length; byte++) {
+    for (var byte=0; byte<Math.min(data.length, this.registers.length); byte++) {
       this.registers[byte].contents = data[byte];
     }
   }
@@ -73,5 +73,14 @@ export class RAM16 extends Component {
       c.push(this.registers[i].contents);
     }
     return c;
+  }
+
+  /**
+   * Sets the contents of all the registers to 0.
+   */
+  clear() {
+    for (var i=0; i<this.registers.length; i++) {
+      this.registers[i].contents = [0,0,0,0,0,0,0,0];
+    }
   }
 }
