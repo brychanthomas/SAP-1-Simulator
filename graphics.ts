@@ -1,6 +1,6 @@
 /**
-Object used by the instruction register graphics to display the
-instruction currently being executed.
+Object used by the instruction register graphics to convert
+machine code back to assembly mnemonics.
 */
 const binaryToInstuction = {
   '0000': 'NOP',
@@ -33,7 +33,9 @@ ADD 15
 JMP 3`
 
 /**
-Used to indicate that the user wants their program stored in RAM.
+Used to indicate that the user wants their program stored in RAM -
+when true the program in the textarea is compiled and the computer
+is reset and reprogrammed.
 */
 var newProgram = false;
 
@@ -146,7 +148,8 @@ var programBox: p5.Element;
 var assembleButton: p5.Element;
 
 /**
-Called by p5.js when the page has loaded - creates the canvas.
+Called by p5.js when the page has loaded - creates the canvas
+and DOM elements.
 */
 function setup()  {
   createCanvas(900, 800);
@@ -159,6 +162,7 @@ function setup()  {
   programBox.style('resize', 'none');
   assembleButton = createButton("Restart and write to RAM");
   assembleButton.position(900, 370);
+  assembleButton.size(70, 70);
   assembleButton.mousePressed(() => newProgram = true);
 }
 
@@ -166,6 +170,10 @@ function setup()  {
 Class of static functions for drawing common graphics.
 */
 class Draw {
+
+  /**
+   * Draws several circles like LEDs to represent a sequence of bits.
+   */
   static binary(binArray: Array<number>, x:number, y: number, colour: Array<number>) {
     for (var i=0; i<binArray.length; i++) {
       fill(colour.map((itm) => itm * binArray[i]));
@@ -173,6 +181,9 @@ class Draw {
     }
   }
 
+  /**
+   * Draws circles to represent bits with the decimal conversion above.
+   */
   static binaryAndNumerical(binArray: Array<number>, x: number, y: number, colour: Array<number>) {
     fill(0);
     textSize(25);
@@ -183,6 +194,9 @@ class Draw {
     Draw.binary(binArray, x+5, y+10, colour);
   }
 
+  /**
+   * Draws a rectangle with a white background and black outline.
+   */
   static rectangle(x: number, y: number, w: number, h: number) {
     strokeWeight(2);
     fill(255);
@@ -190,6 +204,9 @@ class Draw {
     rect(x, y, w, h);
   }
 
+  /**
+   * Draws an arrow pointing in a given direction.
+   */
   static arrow(x: number, y: number, dir: 'l'|'r') {
     fill(0);
     noStroke();
@@ -202,6 +219,10 @@ class Draw {
     }
   }
 
+  /**
+   * Draws connections between a component and the low 4 bits of the bus
+   * with an arrow to show whether it is reading or writing.
+   */
   static lowNibbleConnection(x: number, y: number, dataDir?: 'r'|'l') {
     var bus = computerState._bus.slice(4);
     strokeWeight(3);
@@ -215,6 +236,10 @@ class Draw {
     Draw.arrow(arrowX, y-10, dataDir);
   }
 
+  /**
+   * Draws connections between a component and all 8 bits of the bus
+   * with an optional arrow to show whether it is reading or writing.
+   */
   static busConnection(x: number, y: number, dataDir?: 'r'|'l') {
     var bus = computerState._bus;
     strokeWeight(3);
@@ -228,6 +253,10 @@ class Draw {
     Draw.arrow(arrowX, y-10, dataDir);
   }
 
+  /**
+   * Draws vertical lines between two components, with the
+   * default colour of orange for 1.
+   */
   static verticalConnections(state: Array<number>, x: number, y1: number, y2: number, col?: Array<number>) {
     strokeWeight(3);
     col = col || [255, 125, 0];
@@ -237,6 +266,10 @@ class Draw {
     }
   }
 
+  /**
+   * Draws text with a white background to prevent titles from
+   * becoming bolder over time.
+   */
   static title(title: string, x: number, y: number) {
     fill(255);
     rect(x, y-15, 8.5*title.length, 20);
@@ -245,6 +278,9 @@ class Draw {
   }
 }
 
+/**
+ * Draws the 8 bit bus with green for 1 and black for 0.
+ */
 function drawBus(bus: Array<number>, x: number, y: number) {
   noStroke();
   fill(255);
@@ -259,6 +295,9 @@ function drawBus(bus: Array<number>, x: number, y: number) {
   }
 }
 
+/**
+ * Draws a 4 bit register with a binary and a numerical display.
+ */
 function drawRegister4Bit(state: Array<number>, x: number, y: number, name: string, namexOffset?: number) {
   Draw.rectangle(x, y, 75, 50);
   Draw.binaryAndNumerical(state, x+10, y+25, [255,125,0]);
@@ -269,6 +308,9 @@ function drawRegister4Bit(state: Array<number>, x: number, y: number, name: stri
   Draw.title(name, x+namexOffset, y-8);
 }
 
+/**
+ * Draws a clock that is either high or low.
+ */
 function drawClock(state: number, x: number, y: number) {
   Draw.rectangle(x, y, 75, 50);
   fill(0);
@@ -277,15 +319,18 @@ function drawClock(state: number, x: number, y: number) {
   Draw.title("Clock", x, y-8);
   textSize(20);
   if (state === 1) {
-    text("High", x+15, y+25);
+    text("High", x+17, y+25);
     fill([255, 0, 255]);
-    circle(x+35, y+40, 10);
+    circle(x+38, y+40, 10);
   } else {
-    text("Low", x+15, y+25);
-    circle(x+35, y+40, 10);
+    text("Low", x+20, y+25);
+    circle(x+38, y+40, 10);
   }
 }
 
+/**
+ * Draws an 8 bit register with a binary and numerical display.
+ */
 function drawRegister8Bit(state: Array<number>, x: number, y: number, name: string, namexOffset?: number) {
   Draw.rectangle(x, y, 135, 90);
   Draw.binaryAndNumerical(state, x+10, y+25, [255,125,0]);
@@ -295,6 +340,10 @@ function drawRegister8Bit(state: Array<number>, x: number, y: number, name: stri
   Draw.title(name, x+namexOffset, y-8);
 }
 
+/**
+ * Draws an adder/subtractor with binary and numerical displays as
+ * well as showing whether it is adding or subtracting.
+ */
 function drawAdder(state: Array<number>, x: number, y: number) {
   Draw.rectangle(x, y, 180, 90);
   Draw.binaryAndNumerical(state, x+10, y+25, [255,125,0]);
@@ -307,6 +356,10 @@ function drawAdder(state: Array<number>, x: number, y: number) {
   Draw.title("Adder / Subtractor", x+70, y-8);
 }
 
+/**
+ * Draws an output component with a grey rectangle to represent
+ * the display.
+ */
 function drawOutput(state: Array<number>, x: number, y: number) {
   Draw.rectangle(x, y, 150, 90);
   noStroke();
@@ -323,6 +376,9 @@ function drawOutput(state: Array<number>, x: number, y: number) {
   text(String(value), x+27, y+47);
 }
 
+/**
+ * Draws a 16 byte RAM showing the contents as binary and hexadecimal.
+ */
 function drawRAM(state: Array<Array<number>>, x: number, y: number) {
   Draw.rectangle(x, y, 200, 320);
   textSize(15);
@@ -342,6 +398,11 @@ function drawRAM(state: Array<Array<number>>, x: number, y: number) {
   Draw.title("Random access memory", x-10, y-8);
 }
 
+/**
+ * Draws the instruction register with the binary opcode in blue and
+ * the operand in orange. Also draws the mnemonic of the instruction
+ * in blue and the decimal operand in orange.
+ */
 function drawInstructionRegister(state: Array<number>, x: number, y: number) {
   Draw.rectangle(x, y, 135, 90);
   noStroke();
@@ -359,6 +420,10 @@ function drawInstructionRegister(state: Array<number>, x: number, y: number) {
   Draw.binary(state.slice(4), x+75, y+60, [255, 125, 0]);
 }
 
+/**
+ * Draws the controller sequencer with LEDs for the 6 time steps and
+ * 16 LEDs showing the control word.
+ */
 function drawController(state: object, x: number, y: number) {
   Draw.rectangle(x, y, 275, 100);
   var signals = Object.keys(state);
@@ -388,6 +453,9 @@ function drawController(state: object, x: number, y: number) {
   Draw.title("Controller sequencer", x, y-7);
 }
 
+/**
+ * Draws the flags register with labels for the carry and zero bits.
+ */
 function drawFlagsRegister(flags: string, x: number, y: number) {
   Draw.rectangle(x, y, 50, 40);
   noStroke();
@@ -402,6 +470,10 @@ function drawFlagsRegister(flags: string, x: number, y: number) {
   Draw.verticalConnections([Number(flags[0]), Number(flags[1])], 760, 342, 378);
 }
 
+/**
+ * Draws connections between components and the bus with arrows
+ * based on the current control signals.
+ */
 function drawBusConnections(ctrl: object) {
   if (ctrl['j'] === 1 || ctrl['co'] === 1) {
     Draw.lowNibbleConnection(598, 30, (ctrl['j'] === 1)? 'r' : 'l');
