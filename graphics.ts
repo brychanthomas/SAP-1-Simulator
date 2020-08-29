@@ -16,6 +16,29 @@ const binaryToInstuction = {
   '1111': 'HLT'
 }
 
+
+/**
+The assembly program running when the page loads.
+*/
+var default_program = `LDI 1
+STA 14
+LDI 0
+STA 15
+OUT
+LDA 14
+ADD 15
+STA 14
+OUT
+LDA 15
+ADD 14
+JC 0
+JMP 3`
+
+/**
+Used to indicate that the user wants their program stored in RAM.
+*/
+var newProgram = false;
+
 /**
 Object that calls relevant graphics functions whenever the
 state of a tracked computer part changes.
@@ -33,10 +56,13 @@ var computerState = {
   _ctrl: {},
   _time: 1,
   _flags: '',
+  _clock: 0,
   set bus(bus: Array<number>) {
     this._bus = bus;
     drawBus(bus, 400, 20);
-    drawBusConnections(this._ctrl);
+    if (this._clock === 1) {
+      drawBusConnections(this._ctrl);
+    }
   },
   set pc(state: Array<number>) {
     if (!state.every((val, idx) => val === this._pc[idx])) {
@@ -117,7 +143,9 @@ var computerState = {
   }
 }
 
-var slider:p5.Element;
+var slider: p5.Element;
+var programBox: p5.Element;
+var assembleButton: p5.Element;
 
 /**
 Called by p5.js when the page has loaded - creates the canvas.
@@ -127,6 +155,12 @@ function setup()  {
   background(255);
   slider = createSlider(0.1, 20, 6, 0.1);
   slider.position(20, 20);
+  programBox = createElement('textarea', default_program);
+  programBox.position(900, 100);
+  programBox.size(70, 256);
+  assembleButton = createButton("Restart and write to RAM");
+  assembleButton.position(900, 370);
+  assembleButton.mousePressed(() => newProgram = true);
 }
 
 /**
@@ -287,7 +321,7 @@ function drawOutput(state: Array<number>, x: number, y: number) {
   textSize(50);
   var value = state.slice().reverse().reduce(
     (acc, val, idx) => acc + val * (2**idx));
-  text(String(value), x+27, y+45);
+  text(String(value), x+27, y+47);
 }
 
 function drawRAM(state: Array<Array<number>>, x: number, y: number) {
@@ -349,6 +383,7 @@ function drawController(state: object, x: number, y: number) {
   noStroke();
   text("fetch", x+5, y+47);
   text("execute", x+48, y+47);
+  text("Control word", x+185, y+55);
   fill(0);
   textSize(15);
   Draw.title("Controller sequencer", x, y-7);

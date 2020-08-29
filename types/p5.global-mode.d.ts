@@ -1609,7 +1609,7 @@ declare function createSlider(min: number, max: number, value?: number, step?: n
 //
 //   return has invalid type: Object/p5.Element
 //
-// declare function createButton(label: string, value?: string): Object/p5.Element;
+declare function createButton(label: string, value?: string): p5.Element;
 
 // TODO: Fix createCheckbox() errors in lib/addons/p5.dom.js:
 //
@@ -1633,7 +1633,7 @@ declare function createSlider(min: number, max: number, value?: number, step?: n
 //
 //   return has invalid type: Object/p5.Element
 //
-// declare function createInput(value?: number): Object/p5.Element;
+declare function createInput(value?: any): p5.Element;
 
 // TODO: Fix createFileInput() errors in lib/addons/p5.dom.js:
 //
@@ -1664,7 +1664,7 @@ declare function createSlider(min: number, max: number, value?: number, step?: n
 //
 //   return has invalid type: Object/p5.Element
 //
-// declare function createElement(tag: string, content?: string): Object/p5.Element;
+declare function createElement(tag: string, content?: string): p5.Element;
 
 // Properties from p5.sound
 

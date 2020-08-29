@@ -39,4 +39,9 @@ setInterval(() => {
   computerState.bus = computer.bus.lines;
   computer.clock.speed = slider.value();
   computerState.clockSpeed = computer.clock.speed;
+  if (newProgram) {
+    newProgram = false;
+    computer.reset();
+    computer.ram.program(assemble(programBox.value()));
+  }
 }, Math.max(50, 1000/(computer.clock.speed*2)));
