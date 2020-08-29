@@ -1,3 +1,7 @@
+/**
+ * Used by the assembler to convert assembly mnemonics to
+ * machine code.
+ */
 const instructionToBinary = {
   'NOP': [0,0,0,0],
   'LDA': [0,0,0,1],
@@ -12,6 +16,10 @@ const instructionToBinary = {
   'HLT': [1,1,1,1]
 }
 
+/**
+ * Takes an assembly program as a string and converts it to an
+ * array of 8-bit arrays of machine code.
+ */
 function assemble(program: string) {
   var programArr = program.toUpperCase().split('\n');
   var output: number[][] = [];

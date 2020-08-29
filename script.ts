@@ -25,9 +25,12 @@ setInterval(() => {
   computerState.bus = computer.bus.lines;
   computer.clock.speed = slider.value();
   computerState.clockSpeed = computer.clock.speed;
+  // if the user has requested that their program be assembled
+  // and written to RAM
   if (newProgram) {
     newProgram = false;
     computer.reset();
     computer.ram.program(assemble(programBox.value()));
   }
+  // update graphics twice every clock cycle but not more often than every 50ms
 }, Math.max(50, 1000/(computer.clock.speed*2)));
