@@ -174,4 +174,17 @@ export class Computer {
       fi: 0
     }
   }
+
+  reset() {
+    this.resetControlLines();
+    this.aRegister.contents = [0,0,0,0,0,0,0,0];
+    this.bRegister.contents = [0,0,0,0,0,0,0,0];
+    this.mar.contents = [0,0,0,0];
+    this.pc.state = [0,0,0,0];
+    this.controller.timeStep = 0;
+    this.adderSubtractor.output = [0,0,0,0,0,0,0,0],
+    this.flagsRegister.flags = '00';
+    this.ir.contents = [0,0,0,0,0,0,0,0];
+    this.out.contents = [0,0,0,0,0,0,0,0];
+  }
 }
