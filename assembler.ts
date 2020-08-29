@@ -20,7 +20,7 @@ function assemble(program: string) {
     var operand = line.split(' ')[1] || 0;
     var lineOutput = instructionToBinary[opcode]
     var operandBinary = Number(operand).toString(2).padStart(4, '0').
-                        split('').map((n) => Number(n));
+                        split('').slice(-4).map((n) => Number(n));
     lineOutput = lineOutput.concat(operandBinary);
     output.push(lineOutput);
   }

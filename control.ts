@@ -110,14 +110,14 @@ export class Clock extends Component {
    * so that update is called again later.
    */
   update() {
-    this.level = Number(!this.level);
-    if (this.level === 0) { //falling edge
-      this.computer.clockTock();
-    } else { //rising edge
-      this.computer.clockTick();
-    }
     if (this.computer.controlLines.hlt === 0) { //if computer not halted
-      setTimeout(this.update.bind(this), 1000/(this.speed*2));
+      this.level = Number(!this.level);
+      if (this.level === 0) { //falling edge
+        this.computer.clockTock();
+      } else { //rising edge
+        this.computer.clockTick();
+      }
     }
+    setTimeout(this.update.bind(this), 1000/(this.speed*2));
   }
 }
