@@ -7,8 +7,12 @@ var computer = new Computer();
 computer.ram.program(assemble(default_program));
 
 computer.startClock();
-computer.clock.speed = 6;
+computer.clock.speed = 6; // 6 Hertz
 
+/*
+ * Set all of the properties of the computerState object to
+ * update the graphics.
+ */
 setInterval(() => {
   computerState.ctrl = computer.controlLines;
   computerState.pc = computer.pc.state;
