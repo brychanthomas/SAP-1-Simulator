@@ -10,14 +10,14 @@
     "suppressImplicitAnyIndexErrors": true,
   },
   "files": [
-    "registers.ts",
-    "ram.ts",
-    "computer.ts",
-    "script.ts",
-    "component.ts",
-    "test.ts",
-    "graphics.ts",
-    "assembler.ts"
+    "src/registers.ts",
+    "src/ram.ts",
+    "src/computer.ts",
+    "src/script.ts",
+    "src/component.ts",
+    "src/test.ts",
+    "src/graphics.ts",
+    "src/assembler.ts"
   ],
   "include": [
     "./types"
