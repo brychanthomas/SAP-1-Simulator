@@ -19,6 +19,16 @@ JZ | Jump to the specified instruction number if the zero flag is set.
 OUT | Load the value in the A register into the output register to be shown on a display.
 HLT | Stop the computer clock.
 
+## Specs
+
+The SAP-1 features:
+
+- A whopping 16 bytes of 8 bit RAM that can store integers all the way from 0 to 255
+- A 16-bit control word
+- An 8-bit bus
+- Two general purpose registers
+- An adder/subtractor
+
 ## Information about the SAP-1
 
  - [Ben Eater's series of Youtube videos](https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU) going into detail about how to actually build such a computer.
