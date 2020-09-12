@@ -15,7 +15,7 @@ computer.clock.speed = 6; // 6 Hertz
  */
 setInterval(() => {
   computerState.ctrl = computer.controlLines;
-  computerState.pc = computer.pc.state;
+  computerState.pc = computer.pc.contents;
   computerState.clock = computer.clock.level;
   computerState.aRegister = computer.aRegister.contents;
   computerState.adder = computer.adderSubtractor.output;

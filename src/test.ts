@@ -82,7 +82,7 @@ class UnitTests {
     c.clockTock(); c.clockTick();
     c.clockTock(), c.clockTick();
     UnitTests.compare(c.ir.contents, [1,0,1,0,1,0,1,0], "instruction fetch");
-    UnitTests.compare(c.pc.state, [0,0,0,1], "program counter increment");
+    UnitTests.compare(c.pc.contents, [0,0,0,1], "program counter increment");
   }
 
   static testBasicInstructions() {
@@ -129,7 +129,7 @@ class UnitTests {
     for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
-    UnitTests.compare(c.pc.state, [0,1,1,0], "JMP instruction");
+    UnitTests.compare(c.pc.contents, [0,1,1,0], "JMP instruction");
   }
 
   static testConditionalJumps() {
@@ -138,26 +138,26 @@ class UnitTests {
     for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
-    var output = c.pc.state;
+    var output = c.pc.contents;
     c.flagsRegister.cf = 1;
     c.ram.registers[1].contents = [0,1,1,1, 1,1,1,1]; // JC 15
     for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
-    output = output.concat(c.pc.state);
+    output = output.concat(c.pc.contents);
     UnitTests.compare(output, [0,0,0,1, 1,1,1,1], "JC instruction");
     var c = new Computer();
     c.ram.registers[0].contents = [1,0,0,0, 1,1,1,1]; // JZ 15
     for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
-    var output = c.pc.state;
+    var output = c.pc.contents;
     c.flagsRegister.zf = 1;
     c.ram.registers[1].contents = [1,0,0,0, 1,1,1,1]; // JZ 15
     for (var i=0; i<6; i++) {
       c.clockTock(); c.clockTick();
     }
-    output = output.concat(c.pc.state);
+    output = output.concat(c.pc.contents);
     UnitTests.compare(output, [0,0,0,1, 1,1,1,1], "JZ instruction");
   }
 }

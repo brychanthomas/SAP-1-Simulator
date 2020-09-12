@@ -22,6 +22,29 @@ export class Register8Bit extends Component {
     }
 }
 /**
+ * Abstract class representing a 4-bit register.
+ */
+export class Register4Bit extends Component {
+    constructor(computer) {
+        super(computer);
+        this.contents = [0, 0, 0, 0];
+    }
+    /**
+     * Output the contents of the register to the lower
+     * 4 bits of the bus.
+     */
+    writeToBus() {
+        this.computer.bus.lowNibble = this.contents;
+    }
+    /**
+     * Overwrite the contents of the register with the
+     * data on the lower 4 bits of the bus.
+     */
+    readFromBus() {
+        this.contents = this.computer.bus.lowNibble;
+    }
+}
+/**
  * Class to represent the A register, the first
  * input and the output of the AdderSubtractor.
  */
@@ -85,20 +108,16 @@ export class InstructionRegister extends Register8Bit {
  * 4-bit register that stores the RAM address that is to
  * be read from or written to.
  */
-export class MemoryAddressRegister extends Component {
-    constructor(computer) {
-        super(computer);
-        this.contents = [0, 0, 0, 0];
-    }
+export class MemoryAddressRegister extends Register4Bit {
     /**
-     * Stores the address on the bus when the memory
-     * in control signal is high. Also converts the
+     * Stores the address on the bus when the 'memory
+     * in' control signal is high. Also converts the
      * binary address to decimal in the 'address'
      * property.
      */
     update() {
         if (this.computer.controlLines.mi) {
-            this.contents = this.computer.bus.lowNibble;
+            this.readFromBus();
         }
         //contents of MAR as integer
         this.address = this.contents.slice().reverse().reduce((acc, val, idx) => acc + val * (2 ** idx));
@@ -108,14 +127,10 @@ export class MemoryAddressRegister extends Component {
  * 4-bit program counter that can increment, write to the
  * bus and jump to the value on the bus.
  */
-export class ProgramCounter extends Component {
-    constructor(computer) {
-        super(computer);
-        this.state = [0, 0, 0, 0];
-    }
+export class ProgramCounter extends Register4Bit {
     /**
      * The PC does not use the update method - it uses
-     * the updateIncrement and updateReadWrite instead,
+     * updateIncrement and updateReadWrite instead,
      * as updateIncrement should only be called once
      * every clock cycle.
      */
@@ -129,10 +144,10 @@ export class ProgramCounter extends Component {
      */
     updateReadWrite() {
         if (this.computer.controlLines.co === 1) { //output to bus
-            this.computer.bus.lowNibble = this.state;
+            this.writeToBus();
         }
         if (this.computer.controlLines.j === 1) { //jump to bus value
-            this.state = this.computer.bus.lowNibble;
+            this.readFromBus();
         }
     }
     /**
@@ -141,11 +156,11 @@ export class ProgramCounter extends Component {
      */
     updateIncrement() {
         if (this.computer.controlLines.ci === 1) { //increment counter
-            let value = this.state.slice().reverse().reduce((acc, val, idx) => acc + val * (2 ** idx)); //convert to number
+            let value = this.contents.slice().reverse().reduce((acc, val, idx) => acc + val * (2 ** idx)); //convert to number
             value++; //increment number
             value %= 16;
             //convert number back to array of 4 bits
-            this.state = (value >>> 0).toString(2).padStart(4, '0').split('').slice(-4).map(x => +x);
+            this.contents = (value >>> 0).toString(2).padStart(4, '0').split('').slice(-4).map(x => +x);
         }
     }
 }
