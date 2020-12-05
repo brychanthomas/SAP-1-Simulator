@@ -183,7 +183,7 @@ export class Computer {
     this.aRegister.contents = [0,0,0,0,0,0,0,0];
     this.bRegister.contents = [0,0,0,0,0,0,0,0];
     this.mar.contents = [0,0,0,0];
-    this.pc.state = [0,0,0,0];
+    this.pc.contents = [0,0,0,0];
     this.controller.timeStep = 0;
     this.adderSubtractor.output = [0,0,0,0,0,0,0,0],
     this.flagsRegister.flags = '00';
