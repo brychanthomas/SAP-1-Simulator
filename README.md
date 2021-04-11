@@ -21,7 +21,7 @@ HLT | Stop the computer clock.
 
 ## Specs
 
-The SAP-1 features:
+Ben Eater's SAP-1 features:
 
 - A whopping 16 bytes of 8 bit RAM that can store integers all the way from 0 to 255
 - A 16-bit control word
@@ -32,4 +32,4 @@ The SAP-1 features:
 ## Information about the SAP-1
 
  - [Ben Eater's series of Youtube videos](https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU) going into detail about how to actually build such a computer.
- - [The readme file for EnigmaCurry's Verilog implementation](https://github.com/EnigmaCurry/SAP/blob/master/README.md) of the computer explains some of the higher level details such as control signals and example programs.
+ - [The readme file for EnigmaCurry's Verilog implementation](https://github.com/EnigmaCurry/SAP/blob/master/README.md) of the computer explains a lot of details such as control signals and example programs.
